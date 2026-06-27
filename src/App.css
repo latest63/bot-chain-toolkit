@@ -443,6 +443,27 @@ section {
 }
 
 /* Contracts */
+.contracts {
+  position: relative;
+  overflow: hidden;
+}
+
+.contracts > *:not(.contracts-bg-image) {
+  position: relative;
+  z-index: 1;
+}
+
+.contracts-bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .contract-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));

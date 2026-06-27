@@ -133,6 +133,7 @@ export default function Landing() {
 
       {/* Contracts */}
       <section className="contracts">
+        <img src="/contracts-bg.png" alt="" className="contracts-bg-image" />
         <div className="section-label">Deployed Contracts</div>
         <h2 className="section-title">Testnet Addresses</h2>
         <div className="contract-cards">
