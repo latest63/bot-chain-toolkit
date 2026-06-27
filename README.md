@@ -26,30 +26,26 @@ Verifiably fair lottery using blockhash randomness.
 | Raffle | [`0xbEB798aEE5dA6b2059CafA53a804874F24F6D8f4`](https://scan.bohr.life/address/0xbEB798aEE5dA6b2059CafA53a804874F24F6D8f4) |
 
 ## Tech Stack
-- **Contracts:** Solidity 0.8.28, Foundry
+- **Contracts:** Solidity 0.8.28, Foundry (see `contracts-foundry/`)
 - **Frontend:** React, Vite, ethers.js v6
 - **Network:** BOT Chain Testnet (Chain ID 968)
 
 ## Quick Start
 
-### Contracts
-```bash
-# Install Foundry
-curl -L https://foundry.paradigm.xyz | bash && foundryup
-
-# Build & test
-forge build
-forge test -vv
-
-# Deploy
-PRIVATE_KEY=0x... forge script script/Deploy.s.sol --rpc-url https://rpc.bohr.life --broadcast
-```
-
 ### Frontend
 ```bash
-cd frontend
 npm install
 npm run dev
+```
+
+### Contracts
+```bash
+# Install Foundry: https://book.getfoundry.sh
+curl -L https://foundry.paradigm.xyz | bash && foundryup
+
+cd contracts-foundry
+forge build
+forge test -vv
 ```
 
 ## Network Config
