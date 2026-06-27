@@ -69,13 +69,9 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Divider — Features abstract */}
-      <div className="section-divider">
-        <img src="/features-bg.png" alt="" className="divider-image" />
-      </div>
-
       {/* Features */}
       <section className="features" id="features">
+        <img src="/features-bg.png" alt="" className="features-bg-image" />
         <div className="section-label">Features</div>
         <h2 className="section-title">Two Tools, One Toolkit</h2>
         <p className="section-desc">Everything you need to move BOT and run on-chain games.</p>
@@ -107,13 +103,9 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Divider — How It Works abstract */}
-      <div className="section-divider">
-        <img src="/how-bg.png" alt="" className="divider-image" />
-      </div>
-
       {/* How It Works */}
       <section className="how" id="how">
+        <img src="/how-bg.png" alt="" className="how-bg-image" />
         <div className="section-label">How It Works</div>
         <h2 className="section-title">Built for BOT Chain</h2>
         <p className="section-desc">Deployed in minutes. No setup overhead.</p>
@@ -139,13 +131,9 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Divider — Contracts abstract */}
-      <div className="section-divider">
-        <img src="/contracts-bg.png" alt="" className="divider-image" />
-      </div>
-
       {/* Contracts */}
       <section className="contracts">
+        <img src="/contracts-bg.png" alt="" className="contracts-bg-image" />
         <div className="section-label">Deployed Contracts</div>
         <h2 className="section-title">Testnet Addresses</h2>
         <div className="contract-cards">
