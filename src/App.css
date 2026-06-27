@@ -212,7 +212,7 @@ a:hover { opacity: 0.85; }
 .hero {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
-  padding: clamp(80px, 12vh, 120px) var(--content-padding) clamp(48px, 6vh, 64px);
+  padding: clamp(96px, 14vh, 140px) var(--content-padding) clamp(48px, 6vh, 64px);
 }
 
 .hero-bg-glow {
