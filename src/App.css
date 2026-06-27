@@ -199,8 +199,8 @@ a:hover { opacity: 0.85; }
 }
 
 .btn-lg {
-  padding: clamp(9px, 1.4vw, 12px) clamp(18px, 2.5vw, 24px);
-  font-size: clamp(0.75rem, 1.1vw, 0.82rem);
+  padding: clamp(7px, 1vw, 10px) clamp(14px, 1.8vw, 18px);
+  font-size: clamp(0.68rem, 0.9vw, 0.75rem);
 }
 
 /* ═══════════════════════════════════
