@@ -157,8 +157,11 @@ a:hover { opacity: 0.85; }
 /* ═══════════════════════════════════
    BUTTONS
    ═══════════════════════════════════ */
-.btn-primary {
+.nav-inner .btn-primary {
   margin-left: auto;
+}
+
+.btn-primary {
   display: inline-flex; align-items: center; gap: 4px;
   background: linear-gradient(135deg, #00D4AA, #00b894);
   color: #0a0b0c !important;
