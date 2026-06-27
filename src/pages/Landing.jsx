@@ -25,15 +25,8 @@ export default function Landing() {
 
       {/* Hero */}
       <section className="hero">
-        <div className="hero-3d-kit">
-          <div className="hero-3d-shape"></div>
-          <div className="hero-3d-shape"></div>
-          <div className="hero-3d-shape"></div>
-          <div className="hero-3d-shape"></div>
-          <div className="hero-3d-shape"></div>
-          <div className="hero-3d-shape"></div>
-        </div>
         <div className="hero-bg-glow" />
+        <img src="/hero-bg.png" alt="" className="hero-bg-image" />
         <div className="hero-content">
           <div className="hero-badge">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -38,81 +38,6 @@ body {
 a { color: var(--accent); text-decoration: none; transition: all 0.2s; }
 a:hover { opacity: 0.85; }
 
-/* ═══════════════════════════════════
-   3D KIT — Hero background shapes
-   ═══════════════════════════════════ */
-.hero-3d-kit {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-  z-index: 0;
-}
-
-.hero-3d-shape {
-  position: absolute;
-  border: 1px solid rgba(0, 212, 170, 0.15);
-  border-radius: 50%;
-  transform-style: preserve-3d;
-  opacity: 0.6;
-  background: rgba(0, 212, 170, 0.05);
-}
-
-.hero-3d-shape:nth-child(1) {
-  width: 120px; height: 120px;
-  top: 10%; left: 5%;
-  transform: perspective(600px) rotateX(25deg) rotateY(15deg);
-  animation: float3d 10s ease-in-out infinite;
-  border-color: rgba(0, 212, 170, 0.2);
-  background: radial-gradient(circle, rgba(0, 212, 170, 0.08), transparent);
-}
-
-.hero-3d-shape:nth-child(2) {
-  width: 80px; height: 80px;
-  bottom: 15%; left: 10%;
-  transform: perspective(600px) rotateX(35deg) rotateY(-10deg);
-  animation: float3d 13s ease-in-out infinite 2s;
-  border-color: rgba(0, 212, 170, 0.12);
-}
-
-.hero-3d-shape:nth-child(3) {
-  width: 160px; height: 160px;
-  top: 8%; right: 3%;
-  transform: perspective(600px) rotateX(20deg) rotateY(-25deg);
-  animation: float3d 12s ease-in-out infinite 4s;
-  border-color: rgba(0, 212, 170, 0.1);
-  background: radial-gradient(circle, rgba(0, 212, 170, 0.04), transparent);
-}
-
-.hero-3d-shape:nth-child(4) {
-  width: 70px; height: 70px;
-  bottom: 20%; right: 8%;
-  transform: perspective(600px) rotateX(40deg) rotateY(10deg);
-  animation: float3d 9s ease-in-out infinite 1s;
-  border-color: rgba(0, 212, 170, 0.18);
-  background: rgba(0, 212, 170, 0.06);
-}
-
-.hero-3d-shape:nth-child(5) {
-  width: 50px; height: 50px;
-  top: 45%; left: 2%;
-  transform: perspective(600px) rotateX(30deg) rotateY(20deg);
-  animation: float3d 14s ease-in-out infinite 6s;
-  border-color: rgba(0, 212, 170, 0.2);
-}
-
-.hero-3d-shape:nth-child(6) {
-  width: 90px; height: 90px;
-  top: 30%; right: 1%;
-  transform: perspective(600px) rotateX(35deg) rotateY(-15deg);
-  animation: float3d 11s ease-in-out infinite 3s;
-  border-color: rgba(0, 212, 170, 0.08);
-}
-
-@keyframes float3d {
-  0%, 100% { transform: var(--transform, none) translateY(0); }
-  50% { transform: var(--transform, none) translateY(-25px); }
-}
 
 /* ═══════════════════════════════════
    NAV
@@ -213,6 +138,17 @@ a:hover { opacity: 0.85; }
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
   position: relative; overflow: hidden;
   padding: clamp(96px, 14vh, 140px) var(--content-padding) clamp(48px, 6vh, 64px);
+}
+
+.hero-bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .hero-bg-glow {
