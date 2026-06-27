@@ -147,7 +147,7 @@ a:hover { opacity: 0.85; }
   height: 100%;
   object-fit: contain;
   opacity: 0.12;
-  filter: blur(4px);
+  filter: blur(0.5px);
   pointer-events: none;
   z-index: 0;
 }
@@ -296,7 +296,7 @@ section {
   height: 100%;
   object-fit: contain;
   opacity: 0.1;
-  filter: blur(3px);
+  filter: blur(0.5px);
   pointer-events: none;
   z-index: 0;
 }
