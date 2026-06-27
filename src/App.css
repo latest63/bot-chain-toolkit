@@ -1,14 +1,16 @@
 :root {
-  --bg: #0a0a0f;
-  --card: #12121a;
-  --border: #1e1e2e;
-  --accent: #6c5ce7;
-  --accent-hover: #7c6cf7;
-  --green: #00b894;
-  --red: #e17055;
-  --yellow: #fdcb6e;
-  --text: #e0e0e0;
-  --text-dim: #888;
+  --bg: #121212;
+  --card: #1a1a1a;
+  --card-hover: #222;
+  --border: #2a2a2a;
+  --accent: #00D4AA;
+  --accent-hover: #00e6b8;
+  --accent-dim: rgba(0, 212, 170, 0.1);
+  --green: #00D4AA;
+  --red: #ff6b6b;
+  --yellow: #ffd93d;
+  --text: #ffffff;
+  --text-dim: #aaaaaa;
   --radius: 12px;
 }
 
@@ -35,12 +37,17 @@ body {
 header {
   text-align: center;
   margin-bottom: 32px;
+  padding: 32px 0 16px;
 }
 
 header h1 {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 4px;
+  background: linear-gradient(135deg, var(--accent), #00f5d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .subtitle {
@@ -51,18 +58,20 @@ header h1 {
 
 .btn.connect {
   background: var(--accent);
-  color: white;
+  color: #121212;
   border: none;
   padding: 12px 28px;
   border-radius: var(--radius);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s;
 }
 
 .btn.connect:hover {
   background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
 }
 
 .connected {
@@ -75,6 +84,7 @@ header h1 {
   border-radius: var(--radius);
   font-family: monospace;
   font-size: 0.9rem;
+  color: var(--accent);
 }
 
 .dot {
@@ -116,9 +126,10 @@ header h1 {
 }
 
 .tab.active {
-  background: var(--accent);
-  color: white;
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.15), rgba(0, 212, 170, 0.05));
   border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 20px rgba(0, 212, 170, 0.1);
 }
 
 .tab:hover:not(.active) {
@@ -144,7 +155,7 @@ label {
 
 input,
 textarea {
-  background: var(--card);
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px;
@@ -158,6 +169,7 @@ textarea {
 input:focus,
 textarea:focus {
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
 }
 
 textarea {
@@ -173,12 +185,12 @@ textarea {
 /* Buttons */
 .btn.submit {
   background: var(--accent);
-  color: white;
+  color: #121212;
   border: none;
   padding: 14px;
   border-radius: var(--radius);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -186,6 +198,7 @@ textarea {
 .btn.submit:hover:not(:disabled) {
   background: var(--accent-hover);
   transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
 }
 
 .btn.submit:disabled {
@@ -220,16 +233,24 @@ textarea {
 
 .btn.small {
   background: var(--accent);
-  color: white;
+  color: #121212;
   border: none;
   padding: 8px 14px;
   border-radius: 8px;
   font-size: 0.85rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn.small:hover {
+  background: var(--accent-hover);
+  box-shadow: 0 2px 10px rgba(0, 212, 170, 0.2);
 }
 
 .btn.small.prize {
   background: var(--green);
+  color: #121212;
 }
 
 .btn.refresh {
@@ -241,10 +262,12 @@ textarea {
   cursor: pointer;
   width: 100%;
   margin-top: 12px;
+  transition: all 0.2s;
 }
 
 .btn.refresh:hover {
   border-color: var(--accent);
+  color: var(--accent);
 }
 
 /* Mode Toggle */
@@ -271,8 +294,9 @@ textarea {
 }
 
 .mode-toggle button.active {
-  background: var(--accent);
-  color: white;
+  background: var(--bg);
+  color: var(--accent);
+  border: 1px solid var(--border);
 }
 
 /* Custom Row */
@@ -302,11 +326,12 @@ textarea {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 16px;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
 }
 
 .raffle-card:hover {
   border-color: var(--accent);
+  box-shadow: 0 0 15px rgba(0, 212, 170, 0.05);
 }
 
 .raffle-card.cancelled {
@@ -334,17 +359,17 @@ textarea {
 }
 
 .badge.open {
-  background: rgba(0, 184, 148, 0.15);
+  background: rgba(0, 212, 170, 0.15);
   color: var(--green);
 }
 
 .badge.done {
-  background: rgba(108, 92, 231, 0.15);
+  background: rgba(0, 212, 170, 0.15);
   color: var(--accent);
 }
 
 .badge.closed {
-  background: rgba(225, 112, 85, 0.15);
+  background: rgba(255, 107, 107, 0.15);
   color: var(--red);
 }
 
@@ -372,7 +397,7 @@ textarea {
 }
 
 .raffle-preview {
-  background: var(--card);
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 12px;
@@ -419,13 +444,35 @@ footer {
   text-align: center;
   color: var(--text-dim);
   font-size: 0.85rem;
+  padding: 20px 0;
+  border-top: 1px solid var(--border);
 }
 
 footer a {
   color: var(--accent);
   text-decoration: none;
+  transition: opacity 0.2s;
 }
 
 footer a:hover {
+  opacity: 0.8;
   text-decoration: underline;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-dim);
 }
