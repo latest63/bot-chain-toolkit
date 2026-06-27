@@ -143,7 +143,7 @@ a:hover { opacity: 0.85; }
 }
 
 
-.nav-links { display: flex; gap: clamp(12px, 1.5vw, 18px); margin-right: auto; align-items: center; margin-left: clamp(16px, 3vw, 32px); }
+.nav-links { display: flex; gap: clamp(12px, 1.5vw, 18px); align-items: center; margin-left: clamp(16px, 3vw, 32px); }
 
 .nav-links a {
   color: var(--text-quaternary);
@@ -158,6 +158,7 @@ a:hover { opacity: 0.85; }
    BUTTONS
    ═══════════════════════════════════ */
 .btn-primary {
+  margin-left: auto;
   display: inline-flex; align-items: center; gap: 4px;
   background: linear-gradient(135deg, #00D4AA, #00b894);
   color: #0a0b0c !important;
@@ -522,8 +523,7 @@ section {
    ═══════════════════════════════════ */
 .app {
   max-width: 580px; margin: 0 auto;
-  padding: var(--content-padding);
-  padding-top: clamp(64px, 8vh, 80px);
+  padding: 0 var(--content-padding);
   position: relative;
 }
 
@@ -531,7 +531,7 @@ section {
   position: sticky; top: 0; z-index: 50;
   background: var(--bg);
   display: flex; align-items: center; gap: clamp(6px, 1.5vw, 12px);
-  margin-bottom: 18px; padding: 10px 0 12px;
+  margin-bottom: 18px; padding: clamp(60px, 8vh, 76px) 0 12px;
   border-bottom: 1px solid var(--border);
 }
 
