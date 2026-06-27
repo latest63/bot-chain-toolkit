@@ -1,11 +1,12 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { ethers } from "ethers";
-import { BOT_CHAIN_CONFIG, CONTRACTS, BatchSplitterABI, RaffleABI } from "./contracts";
-import Splitter from "./components/Splitter";
-import Raffle from "./components/Raffle";
-import "./App.css";
+import { BOT_CHAIN_CONFIG, CONTRACTS, BatchSplitterABI, RaffleABI } from "../contracts";
+import Splitter from "../components/Splitter";
+import Raffle from "../components/Raffle";
+import "../App.css";
 
-function App() {
+export default function ToolApp() {
   const [account, setAccount] = useState(null);
   const [provider, setProvider] = useState(null);
   const [activeTab, setActiveTab] = useState("splitter");
@@ -16,21 +17,16 @@ function App() {
       setStatus("❌ Please install MetaMask or a Web3 wallet");
       return;
     }
-
     try {
-      // Request account access
       const accounts = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
-
-      // Switch to BOT Chain
       try {
         await window.ethereum.request({
           method: "wallet_switchEthereumChain",
           params: [{ chainId: BOT_CHAIN_CONFIG.chainId }],
         });
       } catch (switchError) {
-        // Chain not added, add it
         if (switchError.code === 4902) {
           await window.ethereum.request({
             method: "wallet_addEthereumChain",
@@ -38,7 +34,6 @@ function App() {
           });
         }
       }
-
       const web3Provider = new ethers.BrowserProvider(window.ethereum);
       setProvider(web3Provider);
       setAccount(accounts[0]);
@@ -58,12 +53,11 @@ function App() {
 
   return (
     <div className="app">
-      <header>
-        <h1>🔧 BOT Chain Toolkit</h1>
-        <p className="subtitle">Batch Splitter & On-Chain Raffle</p>
-
+      <div className="app-topbar">
+        <Link to="/" className="back-link">← Home</Link>
+        <div className="topbar-brand">🔧 BOT Chain Toolkit</div>
         {!account ? (
-          <button className="btn connect" onClick={connectWallet}>
+          <button className="btn-connect" onClick={connectWallet}>
             Connect Wallet
           </button>
         ) : (
@@ -72,9 +66,9 @@ function App() {
             {account.slice(0, 6)}...{account.slice(-4)}
           </div>
         )}
+      </div>
 
-        {status && <p className="status">{status}</p>}
-      </header>
+      {status && <p className="status">{status}</p>}
 
       <nav className="tabs">
         <button
@@ -92,45 +86,27 @@ function App() {
       </nav>
 
       <main>
-        {!CONTRACTS.batchSplitter && !CONTRACTS.raffle ? (
-          <div className="placeholder">
-            <h2>⏳ Contracts Not Deployed Yet</h2>
-            <p>Deploy the contracts to BOT Chain testnet first, then update the addresses in <code>src/contracts.js</code>.</p>
-            <div className="deploy-info">
-              <code>forge script script/Deploy.s.sol --rpc-url botchain_testnet --broadcast --verify</code>
-            </div>
-          </div>
-        ) : (
-          <>
-            {activeTab === "splitter" && (
-              <Splitter
-                provider={provider}
-                account={account}
-                getContract={getSplitterContract}
-                setStatus={setStatus}
-              />
-            )}
-            {activeTab === "raffle" && (
-              <Raffle
-                provider={provider}
-                account={account}
-                getContract={getRaffleContract}
-                setStatus={setStatus}
-              />
-            )}
-          </>
+        {activeTab === "splitter" && (
+          <Splitter
+            provider={provider}
+            account={account}
+            getContract={getSplitterContract}
+            setStatus={setStatus}
+          />
+        )}
+        {activeTab === "raffle" && (
+          <Raffle
+            provider={provider}
+            account={account}
+            getContract={getRaffleContract}
+            setStatus={setStatus}
+          />
         )}
       </main>
 
-      <footer>
-        <p>
-          Built on <a href="https://www.botchain.ai" target="_blank">BOT Chain</a> ·{" "}
-          <a href="https://scan.bohr.life" target="_blank">Explorer</a> ·{" "}
-          <a href="https://faucet.botchain.ai/basic" target="_blank">Faucet</a>
-        </p>
+      <footer className="app-footer">
+        <p><a href="https://scan.bohr.life" target="_blank" rel="noreferrer">Explorer</a> · <a href="https://faucet.botchain.ai/basic" target="_blank" rel="noreferrer">Faucet</a> · Built on <a href="https://www.botchain.ai" target="_blank" rel="noreferrer">BOT Chain</a></p>
       </footer>
     </div>
   );
 }
-
-export default App;
