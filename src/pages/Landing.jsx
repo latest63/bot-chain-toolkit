@@ -71,6 +71,7 @@ export default function Landing() {
 
       {/* Features */}
       <section className="features" id="features">
+        <img src="/features-bg.png" alt="" className="features-bg-image" />
         <div className="section-label">Features</div>
         <h2 className="section-title">Two Tools, One Toolkit</h2>
         <p className="section-desc">Everything you need to move BOT and run on-chain games.</p>

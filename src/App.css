@@ -279,6 +279,28 @@ section {
 }
 
 /* Features Grid */
+.features {
+  position: relative;
+  overflow: hidden;
+}
+
+.features > *:not(.features-bg-image) {
+  position: relative;
+  z-index: 1;
+}
+
+.features-bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.1;
+  filter: blur(3px);
+  pointer-events: none;
+  z-index: 0;
+}
+
 .features-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
