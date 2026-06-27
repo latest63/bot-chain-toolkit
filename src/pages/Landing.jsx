@@ -21,6 +21,14 @@ export default function Landing() {
 
       {/* Hero */}
       <section className="hero">
+        <div className="hero-3d-kit">
+          <div className="hero-3d-shape"></div>
+          <div className="hero-3d-shape"></div>
+          <div className="hero-3d-shape"></div>
+          <div className="hero-3d-shape"></div>
+          <div className="hero-3d-shape"></div>
+          <div className="hero-3d-shape"></div>
+        </div>
         <div className="hero-bg-glow" />
         <div className="hero-content">
           <div className="hero-badge">🟢 Live on BOT Chain Testnet</div>
