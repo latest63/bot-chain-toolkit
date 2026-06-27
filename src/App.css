@@ -365,6 +365,27 @@ section {
 }
 
 /* Steps */
+.how {
+  position: relative;
+  overflow: hidden;
+}
+
+.how > *:not(.how-bg-image) {
+  position: relative;
+  z-index: 1;
+}
+
+.how-bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .steps {
   display: flex; align-items: flex-start;
   gap: clamp(12px, 2.5vw, 24px);

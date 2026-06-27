@@ -105,6 +105,7 @@ export default function Landing() {
 
       {/* How It Works */}
       <section className="how" id="how">
+        <img src="/how-bg.png" alt="" className="how-bg-image" />
         <div className="section-label">How It Works</div>
         <h2 className="section-title">Built for BOT Chain</h2>
         <p className="section-desc">Deployed in minutes. No setup overhead.</p>
