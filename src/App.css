@@ -141,7 +141,6 @@ a:hover { opacity: 0.85; }
   color: var(--text);
 }
 
-.brand-icon { font-size: clamp(0.9rem, 1.8vw, 1.1rem); }
 
 .nav-links { display: flex; gap: clamp(14px, 2vw, 22px); margin-right: auto; align-items: center; }
 
@@ -524,11 +523,14 @@ section {
   max-width: 580px; margin: 0 auto;
   padding: var(--content-padding);
   padding-top: clamp(64px, 8vh, 80px);
+  position: relative;
 }
 
 .app-topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--bg);
   display: flex; align-items: center; gap: clamp(6px, 1.5vw, 12px);
-  margin-bottom: 18px; padding-bottom: 12px;
+  margin-bottom: 18px; padding: 10px 0 12px;
   border-bottom: 1px solid var(--border);
 }
 

@@ -7,7 +7,11 @@ export default function Landing() {
       <nav className="landing-nav">
         <div className="nav-inner">
           <div className="nav-brand">
-            <span className="brand-icon">🔧</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="#00D4AA" strokeWidth="2" fill="none"/>
+              <circle cx="12" cy="12" r="4" fill="#00D4AA"/>
+              <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#00D4AA" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
             <span className="brand-text">BOT Chain Toolkit</span>
           </div>
           <div className="nav-links">
@@ -31,7 +35,13 @@ export default function Landing() {
         </div>
         <div className="hero-bg-glow" />
         <div className="hero-content">
-          <div className="hero-badge">🟢 Live on BOT Chain Testnet</div>
+          <div className="hero-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="12" r="10" stroke="#00D4AA" strokeWidth="2" fill="none"/>
+              <circle cx="12" cy="12" r="4" fill="#00D4AA"/>
+              <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#00D4AA" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            Live on BOT Chain Testnet</div>
           <h1 className="hero-title">
             Payment & Raffle<br />
             <span className="hero-accent">Toolkit for BOT Chain</span>
