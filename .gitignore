@@ -8,3 +8,6 @@ dist/
 
 # Env
 .env
+
+# Foundry broadcast (contains deployer addresses)
+contracts-foundry/broadcast/
