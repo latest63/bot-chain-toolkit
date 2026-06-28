@@ -616,6 +616,101 @@ section {
   border-radius: 3px;
 }
 
+.history-summary {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(0.62rem, 0.8vw, 0.68rem);
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+/* ── Batch Detail Modal ── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+  padding: var(--content-padding);
+}
+
+.modal {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 100%; max-width: 520px;
+  max-height: 80vh;
+  display: flex; flex-direction: column;
+}
+
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: clamp(12px, 2vw, 16px);
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-close {
+  background: none; border: none;
+  color: var(--text-quaternary);
+  font-size: 1rem; cursor: pointer;
+  padding: 4px; line-height: 1;
+}
+.modal-close:hover { color: var(--text); }
+
+.modal-body {
+  padding: clamp(12px, 2vw, 16px);
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: clamp(10px, 1.5vw, 12px) clamp(12px, 2vw, 16px);
+  border-top: 1px solid var(--border);
+  text-align: right;
+}
+
+.recipients-list { display: flex; flex-direction: column; gap: 4px; }
+
+.recipient-header {
+  display: flex; justify-content: space-between;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(0.55rem, 0.7vw, 0.6rem);
+  font-weight: 600;
+  color: var(--text-quaternary);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.recipient-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.recipient-addr {
+  font-family: "JetBrains Mono", monospace;
+  font-size: clamp(0.48rem, 0.65vw, 0.52rem);
+  color: var(--text-secondary);
+  word-break: break-all;
+  flex: 1; margin-right: 12px;
+}
+
+.recipient-amount {
+  font-family: "JetBrains Mono", monospace;
+  font-size: clamp(0.5rem, 0.7vw, 0.55rem);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.recipient-total {
+  display: flex; justify-content: space-between;
+  padding: 6px 0 0;
+  font-family: "Oswald", sans-serif;
+  font-size: clamp(0.65rem, 0.85vw, 0.72rem);
+  font-weight: 700;
+  color: var(--text);
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+}
+
 .contract-link {
   font-family: "Poppins", sans-serif;
   font-size: clamp(0.62rem, 0.85vw, 0.68rem);
