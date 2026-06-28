@@ -36,7 +36,7 @@ export default function ToolApp() {
       const web3Provider = new ethers.BrowserProvider(window.ethereum);
       setProvider(web3Provider);
       setAccount(accounts[0]);
-      setStatus(`✅ Connected: ${accounts[0].slice(0, 6)}...${accounts[0].slice(-4)}`);
+      setStatus(`✅ Connected`);
     } catch (err) {
       setStatus(`❌ Connection failed: ${err.message}`);
     }
