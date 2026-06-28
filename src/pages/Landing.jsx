@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { CONTRACTS } from "../contracts";
 
 export default function Landing() {
   return (
@@ -137,13 +138,13 @@ export default function Landing() {
         <div className="contract-cards">
           <div className="contract-card">
             <div className="contract-name">BatchSplitter</div>
-            <code className="contract-addr">0xd43C01AA7C040315Cd0Fc9eB6B27130d34180205</code>
-            <a href="https://scan.bohr.life/address/0xd43C01AA7C040315Cd0Fc9eB6B27130d34180205" target="_blank" rel="noreferrer" className="contract-link">View on Explorer →</a>
+            <code className="contract-addr">{CONTRACTS.batchSplitter}</code>
+            <a href={`https://scan.bohr.life/address/${CONTRACTS.batchSplitter}`} target="_blank" rel="noreferrer" className="contract-link">View on Explorer →</a>
           </div>
           <div className="contract-card">
             <div className="contract-name">Raffle</div>
-            <code className="contract-addr">0xbEB798aEE5dA6b2059CafA53a804874F24F6D8f4</code>
-            <a href="https://scan.bohr.life/address/0xbEB798aEE5dA6b2059CafA53a804874F24F6D8f4" target="_blank" rel="noreferrer" className="contract-link">View on Explorer →</a>
+            <code className="contract-addr">{CONTRACTS.raffle}</code>
+            <a href={`https://scan.bohr.life/address/${CONTRACTS.raffle}`} target="_blank" rel="noreferrer" className="contract-link">View on Explorer →</a>
           </div>
         </div>
       </section>

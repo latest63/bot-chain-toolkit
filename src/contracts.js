@@ -11,10 +11,10 @@ export const BOT_CHAIN_CONFIG = {
   blockExplorerUrls: ["https://scan.bohr.life"],
 };
 
-// Contract addresses — set via .env or Vercel env vars (VITE_ prefix)
+// Contract addresses — set via .env (VITE_ prefix) or Vercel env vars
 export const CONTRACTS = {
-  batchSplitter: import.meta.env.VITE_BATCHSPLITTER_ADDRESS || "0xd43C01AA7C040315Cd0Fc9eB6B27130d34180205",
-  raffle: import.meta.env.VITE_RAFFLE_ADDRESS || "0x13c87c9a2212567c1bcf8df1a00154045d47cc31",
+  batchSplitter: import.meta.env.VITE_BATCHSPLITTER_ADDRESS,
+  raffle: import.meta.env.VITE_RAFFLE_ADDRESS,
 };
 
 // ABIs

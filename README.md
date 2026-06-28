@@ -21,10 +21,12 @@ Verifiably fair lottery using blockhash randomness.
 
 ## Deployed Contracts (BOT Chain Testnet)
 
-| Contract | Address |
+Addresses are set via environment variables. See `.env.example`.
+
+| Contract | Env Var |
 |---|---|
-| BatchSplitter | [`0xd43C01AA7C040315Cd0Fc9eB6B27130d34180205`](https://scan.bohr.life/address/0xd43C01AA7C040315Cd0Fc9eB6B27130d34180205) |
-| Raffle | [`0x13c87c9a2212567c1bcf8df1a00154045d47cc31`](https://scan.bohr.life/address/0x13c87c9a2212567c1bcf8df1a00154045d47cc31) |
+| BatchSplitter | `VITE_BATCHSPLITTER_ADDRESS` |
+| Raffle | `VITE_RAFFLE_ADDRESS` |
 
 ## Tech Stack
 - **Contracts:** Solidity 0.8.28, Foundry (see `contracts-foundry/`)
