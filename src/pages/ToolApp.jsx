@@ -1,46 +1,16 @@
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import { ethers } from "ethers";
-import { BOT_CHAIN_CONFIG, CONTRACTS, BatchSplitterABI, RaffleABI } from "../contracts";
+import { CONTRACTS, BatchSplitterABI, RaffleABI } from "../contracts";
 import Splitter from "../components/Splitter";
 import Raffle from "../components/Raffle";
 import "../App.css";
 
 export default function ToolApp() {
-  const [account, setAccount] = useState(null);
-  const [provider, setProvider] = useState(null);
+  const { wallet, connectWallet } = useOutletContext();
+  const { account, provider } = wallet;
   const [activeTab, setActiveTab] = useState("splitter");
   const [status, setStatus] = useState("");
-
-  async function connectWallet() {
-    if (!window.ethereum) {
-      setStatus("❌ Please install MetaMask or a Web3 wallet");
-      return;
-    }
-    try {
-      const accounts = await window.ethereum.request({
-        method: "eth_requestAccounts",
-      });
-      try {
-        await window.ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: BOT_CHAIN_CONFIG.chainId }],
-        });
-      } catch (switchError) {
-        if (switchError.code === 4902) {
-          await window.ethereum.request({
-            method: "wallet_addEthereumChain",
-            params: [BOT_CHAIN_CONFIG],
-          });
-        }
-      }
-      const web3Provider = new ethers.BrowserProvider(window.ethereum);
-      setProvider(web3Provider);
-      setAccount(accounts[0]);
-      setStatus(`✅ Connected`);
-    } catch (err) {
-      setStatus(`❌ Connection failed: ${err.message}`);
-    }
-  }
 
   function getSplitterContract(signer) {
     return new ethers.Contract(CONTRACTS.batchSplitter, BatchSplitterABI, signer);
@@ -59,15 +29,9 @@ export default function ToolApp() {
           <button className="btn-primary btn-lg" onClick={connectWallet}>
             Connect Wallet
           </button>
-          {status && <p className="status">{status}</p>}
         </div>
       ) : (
         <>
-          <div className="connected-bar">
-            <span className="dot"></span>
-            {account.slice(0, 6)}...{account.slice(-4)}
-          </div>
-
           {status && <p className="status">{status}</p>}
 
           <nav className="tabs">

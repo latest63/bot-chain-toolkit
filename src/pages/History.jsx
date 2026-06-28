@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 import { ethers } from "ethers";
-import { BOT_CHAIN_CONFIG, CONTRACTS, BatchSplitterABI, RaffleABI } from "../contracts";
+import { CONTRACTS, BatchSplitterABI, RaffleABI } from "../contracts";
 
 const EVENTS = {
   splitter: [
@@ -17,24 +18,12 @@ const EVENTS = {
 };
 
 export default function History() {
-  const [account, setAccount] = useState(null);
-  const [provider, setProvider] = useState(null);
+  const { wallet, connectWallet } = useOutletContext();
+  const { account, provider } = wallet;
   const [filter, setFilter] = useState("all");
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  async function connect() {
-    if (!window.ethereum) { setError("❌ Install MetaMask"); return; }
-    const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-    try {
-      await window.ethereum.request({ method: "wallet_switchEthereumChain", params: [{ chainId: BOT_CHAIN_CONFIG.chainId }] });
-    } catch (e) {
-      if (e.code === 4902) await window.ethereum.request({ method: "wallet_addEthereumChain", params: [BOT_CHAIN_CONFIG] });
-    }
-    setProvider(new ethers.BrowserProvider(window.ethereum));
-    setAccount(accounts[0]);
-  }
 
   async function fetchHistory() {
     if (!provider) { setError("Connect wallet first"); return; }
@@ -50,7 +39,8 @@ export default function History() {
     if (filter === "all" || filter === "splitter") {
       for (const { name } of EVENTS.splitter) {
         try {
-          const events = await splitter.queryFilter(splitter.filters[name], 0, "latest");
+          const eventFilter = splitter.filters[name];
+          const events = await splitter.queryFilter(eventFilter, 0, "latest");
           for (const ev of events) {
             if (ev.args?.sender?.toLowerCase() === userAddr.toLowerCase()) {
               results.push({ tool: "BatchSplitter", event: name, block: ev.blockNumber, tx: ev.transactionHash, args: [...ev.args] });
@@ -63,17 +53,15 @@ export default function History() {
     if (filter === "all" || filter === "raffle") {
       for (const { name } of EVENTS.raffle) {
         try {
-          const events = await raffle.queryFilter(raffle.filters[name], 0, "latest");
-          const evName = name;
           const eventFilter = raffle.filters[name];
-          const evts = await raffle.queryFilter(eventFilter, 0, "latest");
-          for (const ev of evts) {
+          const events = await raffle.queryFilter(eventFilter, 0, "latest");
+          for (const ev of events) {
             if (ev.args?.creator?.toLowerCase() === userAddr.toLowerCase() ||
                 ev.args?.buyer?.toLowerCase() === userAddr.toLowerCase() ||
                 ev.args?.winner?.toLowerCase() === userAddr.toLowerCase()) {
               results.push({
                 tool: "Raffle",
-                event: evName,
+                event: name,
                 block: ev.blockNumber,
                 tx: ev.transactionHash,
                 args: [...ev.args],
@@ -97,7 +85,7 @@ export default function History() {
       <p className="section-desc">Browse your past transactions on the Splitter and Raffle contracts.</p>
 
       {!account ? (
-        <button className="btn-primary" onClick={connect}>Connect Wallet</button>
+        <button className="btn-primary" onClick={connectWallet}>Connect Wallet</button>
       ) : (
         <>
           <div className="history-controls">
@@ -112,8 +100,6 @@ export default function History() {
               {loading ? "Loading..." : "Fetch History"}
             </button>
           </div>
-
-          <p className="connected-info">Wallet: {account.slice(0, 6)}...{account.slice(-4)}</p>
 
           {error && <p className="status">{error}</p>}
 
