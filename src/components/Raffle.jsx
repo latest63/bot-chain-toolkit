@@ -228,10 +228,10 @@ export default function Raffle({ provider, account, getContract, setStatus }) {
         <form onSubmit={handleCreate} className="create-raffle-form">
           <div className="form-row">
             <label>
-              Raffle Name *
+              Creator Name *
               <input
                 type="text"
-                placeholder="e.g. Community Airdrop"
+                placeholder="e.g. JohnDoe"
                 value={raffleName}
                 onChange={(e) => setRaffleName(e.target.value)}
                 required
