@@ -34,6 +34,11 @@ export default function ToolApp() {
         <>
           {status && <p className="status">{status}</p>}
 
+          <div className="connected-bar">
+            <span className="dot"></span>
+            {account.slice(0, 6)}...{account.slice(-4)}
+          </div>
+
           <nav className="tabs">
             <button
               className={activeTab === "splitter" ? "tab active" : "tab"}

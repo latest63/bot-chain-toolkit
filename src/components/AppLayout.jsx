@@ -119,17 +119,6 @@ export default function AppLayout() {
           BOT Chain Toolkit
         </Link>
 
-        {wallet.account ? (
-          <div className="topbar-wallet">
-            <span className="dot"></span>
-            {wallet.account.slice(0, 6)}...{wallet.account.slice(-4)}
-          </div>
-        ) : (
-          <button className="btn-connect" onClick={connectWallet} disabled={connecting}>
-            {connecting ? "..." : "Connect"}
-          </button>
-        )}
-
         <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
           <span className={`hamburger-line ${menuOpen ? "open" : ""}`} />
           <span className={`hamburger-line ${menuOpen ? "open" : ""}`} />

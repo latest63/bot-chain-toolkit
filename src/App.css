@@ -757,21 +757,6 @@ section {
   border-bottom: 1px solid var(--border);
 }
 
-.topbar-wallet {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: clamp(4px, 0.8vw, 6px) clamp(8px, 1.2vw, 12px);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-xs);
-  background: var(--bg-card);
-  font-family: "JetBrains Mono", monospace;
-  font-size: clamp(0.62rem, 0.85vw, 0.7rem);
-  color: var(--accent);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 130px;
-}
-
 /* Hamburger menu */
 .hamburger {
   background: none; border: none; cursor: pointer;
@@ -822,6 +807,18 @@ section {
 .app-layout { max-width: 580px; margin: 0 auto; padding: 0 var(--content-padding); position: relative; min-height: 100vh; }
 
 .app-welcome { text-align: center; padding-top: clamp(40px, 8vh, 60px); }
+
+.connected-bar {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(0.62rem, 0.85vw, 0.68rem);
+  color: var(--text-tertiary);
+  padding: 4px 10px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-mid);
+  border-radius: 20px;
+  margin-bottom: 14px;
+}
 
 .topbar-brand {
   font-family: "Oswald", sans-serif;
