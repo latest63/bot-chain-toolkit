@@ -157,6 +157,24 @@ export default function History() {
     setModalOpen(true);
   }
 
+  // --- WinnerDrawn modal ---
+  function openWinnerDrawnDetail(log) {
+    setModalType("winnerDrawn");
+    setModalTx(log.tx);
+    setModalData(log);
+    setModalLoading(false);
+    setModalOpen(true);
+  }
+
+  // --- PrizeClaimed modal ---
+  function openPrizeClaimedDetail(log) {
+    setModalType("prizeClaimed");
+    setModalTx(log.tx);
+    setModalData(log);
+    setModalLoading(false);
+    setModalOpen(true);
+  }
+
   function closeModal() {
     setModalOpen(false);
     setModalType(null);
@@ -176,13 +194,15 @@ export default function History() {
   }
 
   function isClickable(event) {
-    return ["BatchSent", "RaffleCreated", "TicketPurchased"].includes(event);
+    return ["BatchSent", "RaffleCreated", "TicketPurchased", "WinnerDrawn", "PrizeClaimed"].includes(event);
   }
 
   function handleClick(log) {
     if (log.event === "BatchSent") openBatchDetail(log.tx);
     else if (log.event === "RaffleCreated") openRaffleCreatedDetail(log);
     else if (log.event === "TicketPurchased") openTicketDetail(log);
+    else if (log.event === "WinnerDrawn") openWinnerDrawnDetail(log);
+    else if (log.event === "PrizeClaimed") openPrizeClaimedDetail(log);
   }
 
   const color = modalData?.args?.color ? `#${modalData.args.color}` : "#00D4AA";
@@ -264,6 +284,8 @@ export default function History() {
                 {modalType === "batch" && "Batch Distribution"}
                 {modalType === "raffleCreated" && "Raffle Created"}
                 {modalType === "ticketPurchased" && "Ticket Purchased"}
+                {modalType === "winnerDrawn" && "Winner Drawn"}
+                {modalType === "prizeClaimed" && "Prize Claimed"}
               </h3>
               <button className="modal-close" onClick={closeModal}>✕</button>
             </div>
@@ -355,6 +377,46 @@ export default function History() {
                     <div className="detail-item">
                       <span className="detail-label">Ticket Number</span>
                       <span className="detail-value">#{modalData.args?.ticketNumber?.toString()}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* WinnerDrawn modal */}
+              {modalType === "winnerDrawn" && modalData && (
+                <div className="raffle-detail-modal">
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <span className="detail-label">Raffle ID</span>
+                      <span className="detail-value">#{modalData.raffleId}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Prize</span>
+                      <span className="detail-value">{formatAmount(modalData.args?.prize)} BOT</span>
+                    </div>
+                    <div className="detail-item" style={{gridColumn: "1 / -1"}}>
+                      <span className="detail-label">Winner</span>
+                      <span className="detail-value detail-addr">{modalData.args?.winner}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* PrizeClaimed modal */}
+              {modalType === "prizeClaimed" && modalData && (
+                <div className="raffle-detail-modal">
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <span className="detail-label">Raffle ID</span>
+                      <span className="detail-value">#{modalData.raffleId}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Amount Claimed</span>
+                      <span className="detail-value">{formatAmount(modalData.args?.amount)} BOT</span>
+                    </div>
+                    <div className="detail-item" style={{gridColumn: "1 / -1"}}>
+                      <span className="detail-label">Winner</span>
+                      <span className="detail-value detail-addr">{modalData.args?.winner}</span>
                     </div>
                   </div>
                 </div>
