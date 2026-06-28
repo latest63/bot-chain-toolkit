@@ -149,30 +149,60 @@ export default function History() {
   }
 
   // --- TicketPurchased modal ---
-  function openTicketDetail(log) {
+  async function openTicketDetail(log) {
     setModalType("ticketPurchased");
     setModalTx(log.tx);
-    setModalData(log);
-    setModalLoading(false);
+    setModalLoading(true);
+    setModalData(null);
     setModalOpen(true);
+    try {
+      const prov = await provider;
+      const signer = await prov.getSigner();
+      const raffle = new ethers.Contract(CONTRACTS.raffle, RaffleABI, signer);
+      const info = await raffle.getRaffle(parseInt(log.raffleId));
+      setModalData({ ...log, raffleInfo: info });
+    } catch (e) {
+      setModalData(log);
+    }
+    setModalLoading(false);
   }
 
   // --- WinnerDrawn modal ---
-  function openWinnerDrawnDetail(log) {
+  async function openWinnerDrawnDetail(log) {
     setModalType("winnerDrawn");
     setModalTx(log.tx);
-    setModalData(log);
-    setModalLoading(false);
+    setModalLoading(true);
+    setModalData(null);
     setModalOpen(true);
+    try {
+      const prov = await provider;
+      const signer = await prov.getSigner();
+      const raffle = new ethers.Contract(CONTRACTS.raffle, RaffleABI, signer);
+      const info = await raffle.getRaffle(parseInt(log.raffleId));
+      setModalData({ ...log, raffleInfo: info });
+    } catch (e) {
+      setModalData(log);
+    }
+    setModalLoading(false);
   }
 
   // --- PrizeClaimed modal ---
-  function openPrizeClaimedDetail(log) {
+  async function openPrizeClaimedDetail(log) {
     setModalType("prizeClaimed");
     setModalTx(log.tx);
-    setModalData(log);
-    setModalLoading(false);
+    setModalLoading(true);
+    setModalData(null);
     setModalOpen(true);
+    try {
+      const prov = await provider;
+      const signer = await prov.getSigner();
+      const raffle = new ethers.Contract(CONTRACTS.raffle, RaffleABI, signer);
+      const info = await raffle.getRaffle(parseInt(log.raffleId));
+      setModalData({ ...log, raffleInfo: info });
+    } catch (e) {
+      setModalData(log);
+    }
+    setModalLoading(false);
   }
 
   function closeModal() {
@@ -361,64 +391,103 @@ export default function History() {
               {/* TicketPurchased modal */}
               {modalType === "ticketPurchased" && modalData && (
                 <div className="raffle-detail-modal">
-                  <div className="detail-grid">
-                    <div className="detail-item">
-                      <span className="detail-label">Raffle ID</span>
-                      <span className="detail-value">#{modalData.raffleId}</span>
-                    </div>
-                    <div className="detail-item">
-                      <span className="detail-label">Buyer</span>
-                      <span className="detail-value detail-addr">{modalData.args?.buyer?.slice(0, 6)}...{modalData.args?.buyer?.slice(-4)}</span>
-                    </div>
-                    <div className="detail-item">
-                      <span className="detail-label">Full Address</span>
-                      <span className="detail-value detail-addr" style={{fontSize: "0.68rem"}}>{modalData.args?.buyer}</span>
-                    </div>
-                    <div className="detail-item">
-                      <span className="detail-label">Ticket Number</span>
-                      <span className="detail-value">#{modalData.args?.ticketNumber?.toString()}</span>
-                    </div>
-                  </div>
+                  {modalLoading ? (
+                    <p className="status" style={{textAlign: "center"}}>Loading raffle details...</p>
+                  ) : (
+                    <>
+                      {modalData.raffleInfo && (
+                        <div className="raffle-detail-banner" style={{borderLeft: `4px solid #${modalData.raffleInfo.color || "00D4AA"}`, background: `linear-gradient(135deg, var(--bg-card), #${modalData.raffleInfo.color || "00D4AA"}08)`}}>
+                          {modalData.raffleInfo.name && <h4 className="banner-name" style={{margin: "0 0 4px"}}>{modalData.raffleInfo.name}</h4>}
+                          {modalData.raffleInfo.title && <p className="banner-subtitle" style={{margin: "0 0 8px"}}>{modalData.raffleInfo.title}</p>}
+                          {modalData.raffleInfo.community && <span className="banner-community" style={{color: `#${modalData.raffleInfo.color || "00D4AA"}`, background: `#${modalData.raffleInfo.color || "00D4AA"}15`}}>{modalData.raffleInfo.community}</span>}
+                        </div>
+                      )}
+                      <div className="detail-grid">
+                        <div className="detail-item">
+                          <span className="detail-label">Raffle ID</span>
+                          <span className="detail-value">#{modalData.raffleId}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-label">Buyer</span>
+                          <span className="detail-value detail-addr">{modalData.args?.buyer?.slice(0, 6)}...{modalData.args?.buyer?.slice(-4)}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-label">Full Address</span>
+                          <span className="detail-value detail-addr" style={{fontSize: "0.68rem"}}>{modalData.args?.buyer}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-label">Ticket Number</span>
+                          <span className="detail-value">#{modalData.args?.ticketNumber?.toString()}</span>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
               {/* WinnerDrawn modal */}
               {modalType === "winnerDrawn" && modalData && (
                 <div className="raffle-detail-modal">
-                  <div className="detail-grid">
-                    <div className="detail-item">
-                      <span className="detail-label">Raffle ID</span>
-                      <span className="detail-value">#{modalData.raffleId}</span>
-                    </div>
-                    <div className="detail-item">
-                      <span className="detail-label">Prize</span>
-                      <span className="detail-value">{formatAmount(modalData.args?.prize)} BOT</span>
-                    </div>
-                    <div className="detail-item" style={{gridColumn: "1 / -1"}}>
-                      <span className="detail-label">Winner</span>
-                      <span className="detail-value detail-addr">{modalData.args?.winner}</span>
-                    </div>
-                  </div>
+                  {modalLoading ? (
+                    <p className="status" style={{textAlign: "center"}}>Loading raffle details...</p>
+                  ) : (
+                    <>
+                      {modalData.raffleInfo && (
+                        <div className="raffle-detail-banner" style={{borderLeft: `4px solid #${modalData.raffleInfo.color || "00D4AA"}`, background: `linear-gradient(135deg, var(--bg-card), #${modalData.raffleInfo.color || "00D4AA"}08)`}}>
+                          {modalData.raffleInfo.name && <h4 className="banner-name" style={{margin: "0 0 4px"}}>{modalData.raffleInfo.name}</h4>}
+                          {modalData.raffleInfo.title && <p className="banner-subtitle" style={{margin: "0 0 8px"}}>{modalData.raffleInfo.title}</p>}
+                          {modalData.raffleInfo.community && <span className="banner-community" style={{color: `#${modalData.raffleInfo.color || "00D4AA"}`, background: `#${modalData.raffleInfo.color || "00D4AA"}15`}}>{modalData.raffleInfo.community}</span>}
+                        </div>
+                      )}
+                      <div className="detail-grid">
+                        <div className="detail-item">
+                          <span className="detail-label">Raffle ID</span>
+                          <span className="detail-value">#{modalData.raffleId}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-label">Prize</span>
+                          <span className="detail-value">{formatAmount(modalData.args?.prize)} BOT</span>
+                        </div>
+                        <div className="detail-item" style={{gridColumn: "1 / -1"}}>
+                          <span className="detail-label">Winner</span>
+                          <span className="detail-value detail-addr">{modalData.args?.winner}</span>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
               {/* PrizeClaimed modal */}
               {modalType === "prizeClaimed" && modalData && (
                 <div className="raffle-detail-modal">
-                  <div className="detail-grid">
-                    <div className="detail-item">
-                      <span className="detail-label">Raffle ID</span>
-                      <span className="detail-value">#{modalData.raffleId}</span>
-                    </div>
-                    <div className="detail-item">
-                      <span className="detail-label">Amount Claimed</span>
-                      <span className="detail-value">{formatAmount(modalData.args?.amount)} BOT</span>
-                    </div>
-                    <div className="detail-item" style={{gridColumn: "1 / -1"}}>
-                      <span className="detail-label">Winner</span>
-                      <span className="detail-value detail-addr">{modalData.args?.winner}</span>
-                    </div>
-                  </div>
+                  {modalLoading ? (
+                    <p className="status" style={{textAlign: "center"}}>Loading raffle details...</p>
+                  ) : (
+                    <>
+                      {modalData.raffleInfo && (
+                        <div className="raffle-detail-banner" style={{borderLeft: `4px solid #${modalData.raffleInfo.color || "00D4AA"}`, background: `linear-gradient(135deg, var(--bg-card), #${modalData.raffleInfo.color || "00D4AA"}08)`}}>
+                          {modalData.raffleInfo.name && <h4 className="banner-name" style={{margin: "0 0 4px"}}>{modalData.raffleInfo.name}</h4>}
+                          {modalData.raffleInfo.title && <p className="banner-subtitle" style={{margin: "0 0 8px"}}>{modalData.raffleInfo.title}</p>}
+                          {modalData.raffleInfo.community && <span className="banner-community" style={{color: `#${modalData.raffleInfo.color || "00D4AA"}`, background: `#${modalData.raffleInfo.color || "00D4AA"}15`}}>{modalData.raffleInfo.community}</span>}
+                        </div>
+                      )}
+                      <div className="detail-grid">
+                        <div className="detail-item">
+                          <span className="detail-label">Raffle ID</span>
+                          <span className="detail-value">#{modalData.raffleId}</span>
+                        </div>
+                        <div className="detail-item">
+                          <span className="detail-label">Amount Claimed</span>
+                          <span className="detail-value">{formatAmount(modalData.args?.amount)} BOT</span>
+                        </div>
+                        <div className="detail-item" style={{gridColumn: "1 / -1"}}>
+                          <span className="detail-label">Winner</span>
+                          <span className="detail-value detail-addr">{modalData.args?.winner}</span>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
             </div>
