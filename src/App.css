@@ -525,6 +525,96 @@ section {
   border-radius: var(--radius-xs);
   border: 1px solid var(--border);
 }
+.status {
+  margin-bottom: 16px;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(0.62rem, 0.8vw, 0.68rem);
+  text-align: center;
+}
+
+/* ── History Page ── */
+.history-page { padding-bottom: clamp(32px, 5vw, 48px); }
+
+.history-controls {
+  display: flex; align-items: center; gap: clamp(8px, 1.2vw, 12px);
+  flex-wrap: wrap; margin-bottom: 14px;
+}
+
+.history-filter { display: flex; gap: 4px; }
+
+.filter-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--text-tertiary);
+  padding: 4px 10px;
+  border-radius: var(--radius-xs);
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(0.6rem, 0.8vw, 0.65rem);
+  cursor: pointer; transition: all 0.2s;
+}
+.filter-btn:hover { border-color: var(--border-hover); color: var(--text-secondary); }
+.filter-btn.active { background: var(--accent-dim); color: var(--accent); border-color: var(--accent-mid); }
+
+.connected-info {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(0.6rem, 0.75vw, 0.65rem);
+  color: var(--text-quaternary);
+  margin-bottom: 12px;
+}
+
+.history-list { display: flex; flex-direction: column; gap: 8px; }
+
+.history-card {
+  background: rgba(15, 16, 18, 0.12);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: clamp(10px, 1.5vw, 14px);
+}
+
+.history-meta {
+  display: flex; align-items: center; gap: 8px;
+  flex-wrap: wrap; margin-bottom: 6px;
+}
+
+.history-tool {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.55rem, 0.7vw, 0.6rem);
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.tag-splitter { background: rgba(0, 212, 170, 0.12); color: var(--accent); }
+.tag-raffle { background: rgba(255, 193, 7, 0.12); color: #ffc107; }
+
+.history-event {
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(0.62rem, 0.8vw, 0.68rem);
+  font-weight: 500;
+  color: var(--text);
+}
+
+.history-block {
+  font-family: "JetBrains Mono", monospace;
+  font-size: clamp(0.5rem, 0.65vw, 0.55rem);
+  color: var(--text-quaternary);
+  margin-left: auto;
+}
+
+.history-args {
+  display: flex; flex-wrap: wrap; gap: 4px;
+  margin-bottom: 6px;
+}
+
+.history-arg {
+  font-family: "JetBrains Mono", monospace;
+  font-size: clamp(0.48rem, 0.65vw, 0.52rem);
+  color: var(--text-tertiary);
+  background: rgba(0,0,0,0.2);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
 
 .contract-link {
   font-family: "Poppins", sans-serif;
@@ -570,6 +660,68 @@ section {
   display: flex; align-items: center; gap: clamp(6px, 1.5vw, 12px);
   margin-bottom: 18px; padding: 10px 0 12px;
   border-bottom: 1px solid var(--border);
+}
+
+/* Hamburger menu */
+.hamburger {
+  background: none; border: none; cursor: pointer;
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 4px; margin-left: auto;
+}
+
+.hamburger-line {
+  display: block; width: 18px; height: 2px;
+  background: var(--text-tertiary);
+  border-radius: 1px;
+  transition: all 0.2s;
+}
+
+.hamburger-line.open:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+.hamburger-line.open:nth-child(2) { opacity: 0; }
+.hamburger-line.open:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+.hamburger-overlay {
+  position: fixed; inset: 0; z-index: 90;
+}
+
+.hamburger-menu {
+  position: absolute; top: 100%; right: 0;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  z-index: 100;
+  min-width: 140px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+.hamburger-item {
+  display: block;
+  padding: 6px 12px;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(0.68rem, 0.9vw, 0.75rem);
+  color: var(--text-secondary);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.hamburger-item:hover,
+.hamburger-item.active { background: var(--accent-dim); color: var(--accent); }
+
+/* App layout (shared between tools & history) */
+.app-layout { max-width: 580px; margin: 0 auto; padding: 0 var(--content-padding); position: relative; min-height: 100vh; }
+
+.app-welcome { text-align: center; padding-top: clamp(40px, 8vh, 60px); }
+.connected-bar {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: "Poppins", sans-serif;
+  font-size: clamp(0.62rem, 0.85vw, 0.68rem);
+  color: var(--text-tertiary);
+  padding: 4px 10px;
+  background: var(--accent-dim);
+  border: 1px solid var(--accent-mid);
+  border-radius: 20px;
+  margin-bottom: 14px;
 }
 
 .topbar-brand {

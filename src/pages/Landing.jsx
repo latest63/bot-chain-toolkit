@@ -19,7 +19,7 @@ export default function Landing() {
             <a href="#how">How It Works</a>
             <a href="https://scan.bohr.life" target="_blank" rel="noreferrer">Explorer</a>
           </div>
-          <Link to="/app" className="btn-primary">Launch App →</Link>
+          <Link to="/tools" className="btn-primary">Launch App →</Link>
         </div>
       </nav>
 
@@ -43,7 +43,7 @@ export default function Landing() {
             sub-second, near-zero fee network.
           </p>
           <div className="hero-actions">
-            <Link to="/app" className="btn-primary btn-lg">Get Started →</Link>
+            <Link to="/tools" className="btn-primary btn-lg">Get Started →</Link>
             <a href="#features" className="btn-ghost btn-lg">Learn More</a>
           </div>
           <div className="hero-stats">
@@ -84,7 +84,7 @@ export default function Landing() {
               <li>✓ Auto-refund remainder</li>
               <li>✓ Perfect for airdrops & payroll</li>
             </ul>
-            <Link to="/app" className="feature-cta">Try Splitter →</Link>
+            <Link to="/tools" className="feature-cta">Try Splitter →</Link>
           </div>
 
           <div className="feature-card">
@@ -96,7 +96,7 @@ export default function Landing() {
               <li>✓ Weighted odds per entry</li>
               <li>✓ Cancel & refund support</li>
             </ul>
-            <Link to="/app" className="feature-cta">Try Raffle →</Link>
+            <Link to="/tools" className="feature-cta">Try Raffle →</Link>
           </div>
         </div>
       </section>

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import { BOT_CHAIN_CONFIG, CONTRACTS, BatchSplitterABI, RaffleABI } from "../contracts";
 import Splitter from "../components/Splitter";
@@ -53,66 +52,66 @@ export default function ToolApp() {
 
   return (
     <div className="app">
-      <div className="app-topbar">
-        <Link to="/" className="topbar-brand">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{verticalAlign: 'middle', marginRight: 4}}>
-            <circle cx="12" cy="12" r="10" stroke="#00D4AA" strokeWidth="2" fill="none"/>
-            <circle cx="12" cy="12" r="4" fill="#00D4AA"/>
-            <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#00D4AA" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-          BOT Chain Toolkit
-        </Link>
-        {!account ? (
-          <button className="btn-connect" onClick={connectWallet}>
+      {!account ? (
+        <div className="app-welcome">
+          <p className="section-title">Connect Your Wallet</p>
+          <p className="section-desc">Connect your wallet to start using the Batch Splitter and Raffle tools.</p>
+          <button className="btn-primary btn-lg" onClick={connectWallet}>
             Connect Wallet
           </button>
-        ) : (
-          <div className="connected">
+          {status && <p className="status">{status}</p>}
+        </div>
+      ) : (
+        <>
+          <div className="connected-bar">
             <span className="dot"></span>
             {account.slice(0, 6)}...{account.slice(-4)}
           </div>
-        )}
-      </div>
 
-      {status && <p className="status">{status}</p>}
+          {status && <p className="status">{status}</p>}
 
-      <nav className="tabs">
-        <button
-          className={activeTab === "splitter" ? "tab active" : "tab"}
-          onClick={() => setActiveTab("splitter")}
-        >
-          💸 Batch Splitter
-        </button>
-        <button
-          className={activeTab === "raffle" ? "tab active" : "tab"}
-          onClick={() => setActiveTab("raffle")}
-        >
-          🎟️ Raffle
-        </button>
-      </nav>
+          <nav className="tabs">
+            <button
+              className={activeTab === "splitter" ? "tab active" : "tab"}
+              onClick={() => setActiveTab("splitter")}
+            >
+              💸 Batch Splitter
+            </button>
+            <button
+              className={activeTab === "raffle" ? "tab active" : "tab"}
+              onClick={() => setActiveTab("raffle")}
+            >
+              🎟️ Raffle
+            </button>
+          </nav>
 
-      <main>
-        {activeTab === "splitter" && (
-          <Splitter
-            provider={provider}
-            account={account}
-            getContract={getSplitterContract}
-            setStatus={setStatus}
-          />
-        )}
-        {activeTab === "raffle" && (
-          <Raffle
-            provider={provider}
-            account={account}
-            getContract={getRaffleContract}
-            setStatus={setStatus}
-          />
-        )}
-      </main>
+          <main>
+            {activeTab === "splitter" && (
+              <Splitter
+                provider={provider}
+                account={account}
+                getContract={getSplitterContract}
+                setStatus={setStatus}
+              />
+            )}
+            {activeTab === "raffle" && (
+              <Raffle
+                provider={provider}
+                account={account}
+                getContract={getRaffleContract}
+                setStatus={setStatus}
+              />
+            )}
+          </main>
 
-      <footer className="app-footer">
-        <p className="footer-built"><span className="badge-logo-wrapper"><img src="/botchain-logo.png" alt="" className="badge-logo" /></span> <a href="https://scan.bohr.life" target="_blank" rel="noreferrer">Explorer</a> · <a href="https://faucet.botchain.ai/basic" target="_blank" rel="noreferrer">Faucet</a> · Built on <a href="https://www.botchain.ai" target="_blank" rel="noreferrer">BOT Chain</a></p>
-      </footer>
+          <footer className="app-footer">
+            <p className="footer-built">
+              <span className="badge-logo-wrapper"><img src="/botchain-logo.png" alt="" className="badge-logo" /></span>
+              <a href="https://scan.bohr.life" target="_blank" rel="noreferrer">Explorer</a> · <a href="https://faucet.botchain.ai/basic" target="_blank" rel="noreferrer">Faucet</a> · Built on <a href="https://www.botchain.ai" target="_blank" rel="noreferrer">BOT Chain</a>
+            </p>
+          </footer>
+        </>
+      )}
     </div>
   );
 }
