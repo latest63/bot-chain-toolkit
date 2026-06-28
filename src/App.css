@@ -1124,9 +1124,9 @@ textarea { resize: vertical; min-height: 50px; }
 
 /* Buy Ticket - Fetch Row */
 .buy-section { display: flex; flex-direction: column; gap: clamp(12px, 2vw, 18px); }
-.fetch-row { display: flex; gap: 8px; }
+.fetch-row { display: flex; gap: 8px; overflow: hidden; }
 .fetch-input {
-  flex: 1; font-family: "Poppins", sans-serif; font-size: max(16px, 0.82rem);
+  flex: 1; min-width: 0; font-family: "Poppins", sans-serif; font-size: max(16px, 0.82rem);
   background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xs);
   padding: 10px 14px; color: var(--text); outline: none; transition: border-color 0.2s;
 }
