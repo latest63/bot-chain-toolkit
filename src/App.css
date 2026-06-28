@@ -481,6 +481,17 @@ section {
   z-index: 0;
 }
 
+.contracts-logo {
+  display: flex; justify-content: center; margin-bottom: clamp(8px, 1vw, 12px);
+}
+
+.contracts-logo img {
+  width: clamp(32px, 4vw, 48px);
+  height: clamp(32px, 4vw, 48px);
+  object-fit: contain;
+  display: block;
+}
+
 .contract-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
@@ -548,6 +559,17 @@ section {
   display: flex; gap: 8px; justify-content: center;
   flex-wrap: wrap;
   font-size: clamp(0.65rem, 0.85vw, 0.72rem);
+}
+
+.footer-built {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+
+.footer-logo {
+  width: clamp(14px, 1.5vw, 18px);
+  height: clamp(14px, 1.5vw, 18px);
+  object-fit: contain;
+  display: block;
 }
 .footer-links span { color: var(--text-quaternary); }
 

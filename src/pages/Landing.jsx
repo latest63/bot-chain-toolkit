@@ -133,6 +133,7 @@ export default function Landing() {
       <section className="contracts">
         <img src="/contracts-bg.png" alt="" className="contracts-bg-image" />
         <div className="section-label">Deployed Contracts</div>
+        <div className="contracts-logo"><img src="/botchain-logo.png" alt="BOT Chain" /></div>
         <h2 className="section-title">Testnet Addresses</h2>
         <div className="contract-cards">
           <div className="contract-card">
@@ -150,7 +151,7 @@ export default function Landing() {
 
       {/* Footer */}
       <footer className="landing-footer">
-        <p>Built for <a href="https://www.botchain.ai" target="_blank" rel="noreferrer">BOT Chain Builder Challenge #1</a></p>
+        <p className="footer-built"><img src="/botchain-logo.png" alt="" className="footer-logo" /> Built for <a href="https://www.botchain.ai" target="_blank" rel="noreferrer">BOT Chain Builder Challenge #1</a></p>
         <p className="footer-links">
           <a href="https://github.com/latest63/bot-chain-toolkit" target="_blank" rel="noreferrer">GitHub</a>
           <span>·</span>

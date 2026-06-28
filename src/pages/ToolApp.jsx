@@ -112,7 +112,7 @@ export default function ToolApp() {
       </main>
 
       <footer className="app-footer">
-        <p><a href="https://scan.bohr.life" target="_blank" rel="noreferrer">Explorer</a> · <a href="https://faucet.botchain.ai/basic" target="_blank" rel="noreferrer">Faucet</a> · Built on <a href="https://www.botchain.ai" target="_blank" rel="noreferrer">BOT Chain</a></p>
+        <p className="footer-built"><img src="/botchain-logo.png" alt="" className="footer-logo" /> <a href="https://scan.bohr.life" target="_blank" rel="noreferrer">Explorer</a> · <a href="https://faucet.botchain.ai/basic" target="_blank" rel="noreferrer">Faucet</a> · Built on <a href="https://www.botchain.ai" target="_blank" rel="noreferrer">BOT Chain</a></p>
       </footer>
     </div>
   );
