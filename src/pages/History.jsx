@@ -23,9 +23,13 @@ export default function History() {
   const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [detailTx, setDetailTx] = useState(null); // tx hash for modal
-  const [detailData, setDetailData] = useState(null);
-  const [detailLoading, setDetailLoading] = useState(false);
+
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalType, setModalType] = useState(null); // "batch" | "raffleCreated" | "ticketPurchased"
+  const [modalData, setModalData] = useState(null);
+  const [modalLoading, setModalLoading] = useState(false);
+  const [modalTx, setModalTx] = useState(null);
 
   async function fetchHistory() {
     if (!provider) return;
@@ -51,6 +55,7 @@ export default function History() {
                 tx: ev.transactionHash,
                 recipientCount: ev.args.recipientCount?.toString(),
                 totalAmount: ev.args.totalAmount?.toString(),
+                args: ev.args,
               });
             }
           }
@@ -73,6 +78,7 @@ export default function History() {
                 block: ev.blockNumber,
                 tx: ev.transactionHash,
                 raffleId: ev.args?.raffleId?.toString(),
+                args: ev.args,
               });
             }
           }
@@ -86,30 +92,28 @@ export default function History() {
     if (!results.length) setError("No events found for your address");
   }
 
-  // Auto-fetch on mount & when filter changes
   useEffect(() => {
     if (account && provider) fetchHistory();
   }, [account, provider, filter]);
 
+  // --- Batch detail modal ---
   async function openBatchDetail(txHash) {
-    setDetailTx(txHash);
-    setDetailLoading(true);
-    setDetailData(null);
+    setModalType("batch");
+    setModalTx(txHash);
+    setModalLoading(true);
+    setModalData(null);
+    setModalOpen(true);
     try {
       const prov = await provider;
       const tx = await prov.getTransaction(txHash);
-      if (!tx || !tx.data) { setDetailData([]); setDetailLoading(false); return; }
+      if (!tx || !tx.data) { setModalData([]); setModalLoading(false); return; }
 
-      // Try to decode as splitCustom or splitEqually
       const iface = new ethers.Interface(BatchSplitterABI);
       let decoded;
-      try {
-        decoded = iface.parseTransaction({ data: tx.data, value: tx.value });
-      } catch {
-        setDetailData([]); setDetailLoading(false); return;
-      }
+      try { decoded = iface.parseTransaction({ data: tx.data, value: tx.value }); }
+      catch { setModalData([]); setModalLoading(false); return; }
 
-      if (!decoded) { setDetailData([]); setDetailLoading(false); return; }
+      if (!decoded) { setModalData([]); setModalLoading(false); return; }
 
       const recipients = [];
       if (decoded.name === "splitEqually") {
@@ -127,19 +131,61 @@ export default function History() {
           recipients.push({ address: addrs[i], amount: ethers.formatEther(amounts[i]) });
         }
       }
-
-      setDetailData(recipients);
+      setModalData(recipients);
     } catch (e) {
       console.error(e);
-      setDetailData([]);
+      setModalData([]);
     }
-    setDetailLoading(false);
+    setModalLoading(false);
+  }
+
+  // --- RaffleCreated modal ---
+  function openRaffleCreatedDetail(log) {
+    setModalType("raffleCreated");
+    setModalTx(log.tx);
+    setModalData(log);
+    setModalLoading(false);
+    setModalOpen(true);
+  }
+
+  // --- TicketPurchased modal ---
+  function openTicketDetail(log) {
+    setModalType("ticketPurchased");
+    setModalTx(log.tx);
+    setModalData(log);
+    setModalLoading(false);
+    setModalOpen(true);
+  }
+
+  function closeModal() {
+    setModalOpen(false);
+    setModalType(null);
+    setModalData(null);
+    setModalTx(null);
   }
 
   function formatAmount(wei) {
     if (!wei) return "";
     return ethers.formatEther(wei);
   }
+
+  function formatTimestamp(deadline) {
+    if (!deadline) return "";
+    const d = new Date(Number(deadline) * 1000);
+    return d.toLocaleString();
+  }
+
+  function isClickable(event) {
+    return ["BatchSent", "RaffleCreated", "TicketPurchased"].includes(event);
+  }
+
+  function handleClick(log) {
+    if (log.event === "BatchSent") openBatchDetail(log.tx);
+    else if (log.event === "RaffleCreated") openRaffleCreatedDetail(log);
+    else if (log.event === "TicketPurchased") openTicketDetail(log);
+  }
+
+  const color = modalData?.args?.color ? `#${modalData.args.color}` : "#00D4AA";
 
   return (
     <div className="history-page">
@@ -169,8 +215,9 @@ export default function History() {
           {logs.length > 0 && !loading && (
             <div className="history-list">
               {logs.map((log, i) => (
-                <div key={i} className="history-card" onClick={log.event === "BatchSent" ? () => openBatchDetail(log.tx) : undefined}
-                     style={log.event === "BatchSent" ? {cursor: "pointer"} : undefined}>
+                <div key={i} className="history-card"
+                     onClick={isClickable(log.event) ? () => handleClick(log) : undefined}
+                     style={isClickable(log.event) ? {cursor: "pointer"} : undefined}>
                   <div className="history-meta">
                     <span className={`history-tool ${log.tool === "BatchSplitter" ? "tag-splitter" : "tag-raffle"}`}>{log.tool}</span>
                     <span className="history-event">{log.event}</span>
@@ -182,16 +229,23 @@ export default function History() {
                     </div>
                   )}
                   {log.event === "RaffleCreated" && log.raffleId && (
-                    <div className="history-summary">Raffle #{log.raffleId}</div>
+                    <div className="history-summary">
+                      🎰 Raffle #{log.raffleId}
+                      {log.args?.name && ` · ${log.args.name}`}
+                      {log.args?.title && ` — ${log.args.title}`}
+                    </div>
                   )}
                   {log.event === "TicketPurchased" && log.raffleId && (
-                    <div className="history-summary">Raffle #{log.raffleId}</div>
+                    <div className="history-summary">🎟️ Raffle #{log.raffleId}</div>
                   )}
                   {log.event === "WinnerDrawn" && log.raffleId && (
-                    <div className="history-summary">Raffle #{log.raffleId}</div>
+                    <div className="history-summary">🏆 Raffle #{log.raffleId}</div>
                   )}
                   {log.event === "PrizeClaimed" && log.raffleId && (
-                    <div className="history-summary">Raffle #{log.raffleId}</div>
+                    <div className="history-summary">💰 Raffle #{log.raffleId}</div>
+                  )}
+                  {log.event === "RaffleCancelled" && log.raffleId && (
+                    <div className="history-summary">❌ Raffle #{log.raffleId}</div>
                   )}
                   <a href={`https://scan.bohr.life/tx/${log.tx}`} target="_blank" rel="noreferrer" className="contract-link" onClick={e => e.stopPropagation()}>View Tx →</a>
                 </div>
@@ -201,40 +255,114 @@ export default function History() {
         </>
       )}
 
-      {/* Batch Detail Modal */}
-      {detailTx && (
-        <div className="modal-overlay" onClick={() => { setDetailTx(null); setDetailData(null); }}>
+      {/* Modal */}
+      {modalOpen && (
+        <div className="modal-overlay" onClick={closeModal}>
           <div className="modal" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
-              <h3 className="section-title" style={{margin: 0}}>Batch Distribution</h3>
-              <button className="modal-close" onClick={() => { setDetailTx(null); setDetailData(null); }}>✕</button>
+              <h3 className="section-title" style={{margin: 0}}>
+                {modalType === "batch" && "Batch Distribution"}
+                {modalType === "raffleCreated" && "Raffle Created"}
+                {modalType === "ticketPurchased" && "Ticket Purchased"}
+              </h3>
+              <button className="modal-close" onClick={closeModal}>✕</button>
             </div>
+
             <div className="modal-body">
-              {detailLoading ? (
-                <p className="status" style={{textAlign: "center"}}>Decoding transaction...</p>
-              ) : detailData && detailData.length > 0 ? (
-                <div className="recipients-list">
-                  <div className="recipient-header">
-                    <span>Recipient</span>
-                    <span>Amount (BOT)</span>
-                  </div>
-                  {detailData.map((r, j) => (
-                    <div key={j} className="recipient-row">
-                      <span className="recipient-addr">{r.address}</span>
-                      <span className="recipient-amount">{r.amount}</span>
+              {/* Batch modal */}
+              {modalType === "batch" && (
+                modalLoading ? (
+                  <p className="status" style={{textAlign: "center"}}>Decoding transaction...</p>
+                ) : modalData && modalData.length > 0 ? (
+                  <div className="recipients-list">
+                    <div className="recipient-header">
+                      <span>Recipient</span>
+                      <span>Amount (BOT)</span>
                     </div>
-                  ))}
-                  <div className="recipient-total">
-                    <span>Total</span>
-                    <span>{detailData.reduce((s, r) => s + parseFloat(r.amount), 0).toFixed(4)} BOT</span>
+                    {modalData.map((r, j) => (
+                      <div key={j} className="recipient-row">
+                        <span className="recipient-addr">{r.address}</span>
+                        <span className="recipient-amount">{r.amount}</span>
+                      </div>
+                    ))}
+                    <div className="recipient-total">
+                      <span>Total</span>
+                      <span>{modalData.reduce((s, r) => s + parseFloat(r.amount), 0).toFixed(4)} BOT</span>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="status" style={{textAlign: "center"}}>Could not decode transaction data.</p>
+                )
+              )}
+
+              {/* RaffleCreated modal */}
+              {modalType === "raffleCreated" && modalData && (
+                <div className="raffle-detail-modal" style={{"--banner-color": color}}>
+                  <div className="raffle-detail-banner" style={{borderLeft: `4px solid ${color}`, background: `linear-gradient(135deg, var(--bg-card), ${color}08)`}}>
+                    {modalData.args?.name && <h4 className="banner-name" style={{margin: "0 0 4px"}}>{modalData.args.name}</h4>}
+                    {modalData.args?.title && <p className="banner-subtitle" style={{margin: "0 0 8px"}}>{modalData.args.title}</p>}
+                    {modalData.args?.community && <span className="banner-community" style={{color, background: `${color}15`}}>{modalData.args.community}</span>}
+                  </div>
+
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <span className="detail-label">Raffle ID</span>
+                      <span className="detail-value">#{modalData.raffleId}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Creator</span>
+                      <span className="detail-value detail-addr">{modalData.args?.creator?.slice(0, 6)}...{modalData.args?.creator?.slice(-4)}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Ticket Price</span>
+                      <span className="detail-value">{formatAmount(modalData.args?.ticketPrice)} BOT</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Max Tickets</span>
+                      <span className="detail-value">{Number(modalData.args?.maxTickets) === 0 ? "Unlimited" : Number(modalData.args?.maxTickets)}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Entry Deadline</span>
+                      <span className="detail-value">{formatTimestamp(modalData.args?.entryDeadline)}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Banner Color</span>
+                      <span className="detail-value">
+                        <span style={{display: "inline-block", width: 12, height: 12, borderRadius: 3, background: color, marginRight: 6, verticalAlign: "middle"}}></span>
+                        {color}
+                      </span>
+                    </div>
                   </div>
                 </div>
-              ) : (
-                <p className="status" style={{textAlign: "center"}}>Could not decode transaction data.</p>
+              )}
+
+              {/* TicketPurchased modal */}
+              {modalType === "ticketPurchased" && modalData && (
+                <div className="raffle-detail-modal">
+                  <div className="detail-grid">
+                    <div className="detail-item">
+                      <span className="detail-label">Raffle ID</span>
+                      <span className="detail-value">#{modalData.raffleId}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Buyer</span>
+                      <span className="detail-value detail-addr">{modalData.args?.buyer?.slice(0, 6)}...{modalData.args?.buyer?.slice(-4)}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Full Address</span>
+                      <span className="detail-value detail-addr" style={{fontSize: "0.68rem"}}>{modalData.args?.buyer}</span>
+                    </div>
+                    <div className="detail-item">
+                      <span className="detail-label">Ticket Number</span>
+                      <span className="detail-value">#{modalData.args?.ticketNumber?.toString()}</span>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
+
             <div className="modal-footer">
-              <a href={`https://scan.bohr.life/tx/${detailTx}`} target="_blank" rel="noreferrer" className="contract-link">View on Explorer →</a>
+              <a href={`https://scan.bohr.life/tx/${modalTx}`} target="_blank" rel="noreferrer" className="contract-link">View on Explorer →</a>
             </div>
           </div>
         </div>

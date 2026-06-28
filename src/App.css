@@ -711,6 +711,32 @@ section {
   margin-top: 4px;
 }
 
+/* Raffle Detail Modal */
+.raffle-detail-modal { display: flex; flex-direction: column; gap: 14px; }
+.raffle-detail-banner {
+  border-radius: var(--radius-xs); padding: clamp(10px, 1.5vw, 14px);
+}
+.detail-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+@media (max-width: 480px) { .detail-grid { grid-template-columns: 1fr; } }
+.detail-item {
+  background: rgba(0,0,0,0.2); border-radius: var(--radius-xs);
+  padding: clamp(8px, 1.2vw, 10px);
+}
+.detail-label {
+  display: block; font-family: "Poppins", sans-serif; font-weight: 400;
+  font-size: clamp(0.52rem, 0.7vw, 0.58rem); color: var(--text-quaternary);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 3px;
+}
+.detail-value {
+  display: block; font-family: "Oswald", sans-serif; font-weight: 700;
+  font-size: clamp(0.78rem, 1.1vw, 0.88rem); color: var(--text); word-break: break-all;
+}
+.detail-addr {
+  font-family: "JetBrains Mono", monospace; font-weight: 400;
+}
+
 .contract-link {
   font-family: "Poppins", sans-serif;
   font-size: clamp(0.62rem, 0.85vw, 0.68rem);
