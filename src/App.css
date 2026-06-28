@@ -933,7 +933,7 @@ input, textarea {
   color: var(--text);
   font-family: "Poppins", sans-serif;
   font-weight: 400;
-  font-size: clamp(0.72rem, 0.95vw, 0.78rem);
+  font-size: max(16px, clamp(0.72rem, 0.95vw, 0.78rem));
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -1126,7 +1126,7 @@ textarea { resize: vertical; min-height: 50px; }
 .buy-section { display: flex; flex-direction: column; gap: clamp(12px, 2vw, 18px); }
 .fetch-row { display: flex; gap: 8px; }
 .fetch-input {
-  flex: 1; font-family: "Poppins", sans-serif; font-size: 0.82rem;
+  flex: 1; font-family: "Poppins", sans-serif; font-size: max(16px, 0.82rem);
   background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-xs);
   padding: 10px 14px; color: var(--text); outline: none; transition: border-color 0.2s;
 }
