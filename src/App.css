@@ -67,6 +67,13 @@ a:hover { opacity: 0.85; }
   color: var(--text);
 }
 
+.nav-logo {
+  width: clamp(16px, 2vw, 22px);
+  height: clamp(16px, 2vw, 22px);
+  object-fit: contain;
+  display: block;
+}
+
 
 .nav-links { display: flex; gap: clamp(12px, 1.5vw, 18px); align-items: center; margin-left: clamp(16px, 3vw, 32px); }
 
@@ -586,6 +593,14 @@ section {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: flex; align-items: center; gap: 5px;
+}
+
+.topbar-logo {
+  width: clamp(14px, 1.8vw, 18px);
+  height: clamp(14px, 1.8vw, 18px);
+  object-fit: contain;
+  display: block;
 }
 
 .btn-connect {
