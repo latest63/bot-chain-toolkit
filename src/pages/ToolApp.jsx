@@ -54,15 +54,14 @@ export default function ToolApp() {
   return (
     <div className="app">
       <div className="app-topbar">
-        <Link to="/" className="back-link">← Home</Link>
-        <div className="topbar-brand">
+        <Link to="/" className="topbar-brand">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{verticalAlign: 'middle', marginRight: 4}}>
             <circle cx="12" cy="12" r="10" stroke="#00D4AA" strokeWidth="2" fill="none"/>
             <circle cx="12" cy="12" r="4" fill="#00D4AA"/>
             <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#00D4AA" strokeWidth="2" strokeLinecap="round"/>
           </svg>
           BOT Chain Toolkit
-        </div>
+        </Link>
         {!account ? (
           <button className="btn-connect" onClick={connectWallet}>
             Connect Wallet

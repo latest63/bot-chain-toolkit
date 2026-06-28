@@ -572,23 +572,15 @@ section {
   border-bottom: 1px solid var(--border);
 }
 
-.back-link {
-  color: var(--text-tertiary);
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
-  font-size: clamp(0.72rem, 1vw, 0.78rem);
-  transition: color 0.2s; white-space: nowrap;
-}
-.back-link:hover { color: var(--text); }
-
 .topbar-brand {
   font-family: "Oswald", sans-serif;
   font-size: clamp(0.78rem, 1.3vw, 0.88rem);
   text-transform: uppercase; letter-spacing: 0.03em;
   margin-right: auto;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-decoration: none;
+  color: var(--text);
+  display: flex; align-items: center;
 }
 
 .btn-connect {
