@@ -9,6 +9,8 @@ pragma solidity ^0.8.28;
 contract Raffle {
     struct RaffleInfo {
         address creator;
+        string title;
+        string color;           // hex color e.g. "00D4AA"
         uint256 ticketPrice;
         uint256 maxTickets;      // 0 = unlimited
         uint256 totalCollected;
@@ -26,7 +28,7 @@ contract Raffle {
     mapping(uint256 => address[]) internal entrants;                  // raffleId => unique entrant addresses
     mapping(uint256 => mapping(address => bool)) internal entered;
 
-    event RaffleCreated(uint256 indexed raffleId, address indexed creator, uint256 ticketPrice, uint256 maxTickets, uint256 entryDeadline);
+    event RaffleCreated(uint256 indexed raffleId, address indexed creator, string title, string color, uint256 ticketPrice, uint256 maxTickets, uint256 entryDeadline);
     event TicketPurchased(uint256 indexed raffleId, address indexed buyer, uint256 ticketNumber);
     event WinnerDrawn(uint256 indexed raffleId, address indexed winner, uint256 prize);
     event RaffleCancelled(uint256 indexed raffleId);
@@ -39,23 +41,30 @@ contract Raffle {
 
     /**
      * @notice Create a new raffle
+     * @param _title Title of the raffle
+     * @param _color Hex color for the premium banner (e.g. "00D4AA")
      * @param _ticketPrice Price per ticket in wei
      * @param _maxTickets Maximum number of tickets (0 = unlimited)
      * @param _durationSeconds How long entries stay open
      */
     function createRaffle(
+        string calldata _title,
+        string calldata _color,
         uint256 _ticketPrice,
         uint256 _maxTickets,
         uint256 _durationSeconds
     ) external returns (uint256) {
         require(_ticketPrice > 0, "Price must be > 0");
         require(_durationSeconds >= 10, "Duration too short");
+        require(bytes(_title).length > 0, "Title required");
 
         raffleCounter++;
         uint256 id = raffleCounter;
 
         raffles[id] = RaffleInfo({
             creator: msg.sender,
+            title: _title,
+            color: _color,
             ticketPrice: _ticketPrice,
             maxTickets: _maxTickets,
             totalCollected: 0,
@@ -67,7 +76,7 @@ contract Raffle {
             cancelled: false
         });
 
-        emit RaffleCreated(id, msg.sender, _ticketPrice, _maxTickets, block.timestamp + _durationSeconds);
+        emit RaffleCreated(id, msg.sender, _title, _color, _ticketPrice, _maxTickets, block.timestamp + _durationSeconds);
         return id;
     }
 

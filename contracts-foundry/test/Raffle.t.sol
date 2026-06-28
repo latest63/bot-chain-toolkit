@@ -23,13 +23,15 @@ contract RaffleTest is Test {
 
     function test_createRaffle() public {
         vm.prank(creator);
-        uint256 id = raffle.createRaffle(1 ether, 100, 60);
+        uint256 id = raffle.createRaffle("Test Raffle", "00D4AA", 1 ether, 100, 60);
 
         assertEq(id, 1);
         assertEq(raffle.raffleCounter(), 1);
 
         Raffle.RaffleInfo memory info = raffle.getRaffle(1);
         assertEq(info.creator, creator);
+        assertEq(info.title, "Test Raffle");
+        assertEq(info.color, "00D4AA");
         assertEq(info.ticketPrice, 1 ether);
         assertEq(info.maxTickets, 100);
         assertFalse(info.drawn);
@@ -39,20 +41,26 @@ contract RaffleTest is Test {
     function test_createRaffle_zeroPrice() public {
         vm.prank(creator);
         vm.expectRevert("Price must be > 0");
-        raffle.createRaffle(0, 100, 60);
+        raffle.createRaffle("Test", "00D4AA", 0, 100, 60);
     }
 
     function test_createRaffle_shortDuration() public {
         vm.prank(creator);
         vm.expectRevert("Duration too short");
-        raffle.createRaffle(1 ether, 100, 5);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 100, 5);
+    }
+
+    function test_createRaffle_emptyTitle() public {
+        vm.prank(creator);
+        vm.expectRevert("Title required");
+        raffle.createRaffle("", "00D4AA", 1 ether, 100, 60);
     }
 
     // --- Buy Ticket ---
 
     function test_buyTicket() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 100, 60);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 100, 60);
 
         vm.prank(player1);
         raffle.buyTicket{value: 1 ether}(1);
@@ -65,7 +73,7 @@ contract RaffleTest is Test {
 
     function test_buyMultipleTickets() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 0, 60);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 0, 60);
 
         vm.prank(player1);
         raffle.buyTicket{value: 1 ether}(1);
@@ -77,7 +85,7 @@ contract RaffleTest is Test {
 
     function test_buyTicket_wrongAmount() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 100, 60);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 100, 60);
 
         vm.prank(player1);
         vm.expectRevert("Wrong amount");
@@ -86,7 +94,7 @@ contract RaffleTest is Test {
 
     function test_buyTicket_afterDeadline() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 100, 60);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 100, 60);
 
         vm.warp(block.timestamp + 61);
 
@@ -97,7 +105,7 @@ contract RaffleTest is Test {
 
     function test_buyTicket_soldOut() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 1, 60);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 1, 60);
 
         vm.prank(player1);
         raffle.buyTicket{value: 1 ether}(1);
@@ -111,7 +119,7 @@ contract RaffleTest is Test {
 
     function test_drawWinner() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 0, 10);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 0, 10);
 
         vm.prank(player1);
         raffle.buyTicket{value: 1 ether}(1);
@@ -131,7 +139,7 @@ contract RaffleTest is Test {
 
     function test_drawWinner_stillOpen() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 0, 60);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 0, 60);
 
         vm.prank(player1);
         raffle.buyTicket{value: 1 ether}(1);
@@ -143,7 +151,7 @@ contract RaffleTest is Test {
 
     function test_drawWinner_notCreator() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 0, 10);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 0, 10);
 
         vm.prank(player1);
         raffle.buyTicket{value: 1 ether}(1);
@@ -157,7 +165,7 @@ contract RaffleTest is Test {
 
     function test_drawWinner_noTickets() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 0, 10);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 0, 10);
 
         vm.warp(block.timestamp + 11);
 
@@ -170,7 +178,7 @@ contract RaffleTest is Test {
 
     function test_claimPrize() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 0, 10);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 0, 10);
 
         vm.prank(player1);
         raffle.buyTicket{value: 1 ether}(1);
@@ -187,21 +195,19 @@ contract RaffleTest is Test {
 
         uint256 balBefore = winner.balance;
 
-        // The winner is a makeAddr EOA, so we can prank and call
         vm.prank(winner);
         raffle.claimPrize(1);
 
         uint256 balAfter = winner.balance;
         assertEq(balAfter - balBefore, 2 ether);
 
-        // Prize should now be 0
         info = raffle.getRaffle(1);
         assertEq(info.prizeAmount, 0);
     }
 
     function test_claimPrize_notWinner() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 0, 10);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 0, 10);
 
         vm.prank(player1);
         raffle.buyTicket{value: 1 ether}(1);
@@ -223,7 +229,7 @@ contract RaffleTest is Test {
 
     function test_cancelRaffle() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 0, 60);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 0, 60);
 
         vm.prank(player1);
         raffle.buyTicket{value: 1 ether}(1);
@@ -246,7 +252,7 @@ contract RaffleTest is Test {
 
     function test_cancelRaffle_notCreator() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 0, 60);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 0, 60);
 
         vm.prank(player1);
         vm.expectRevert("Only creator");
@@ -257,7 +263,7 @@ contract RaffleTest is Test {
 
     function test_isOpen() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 0, 60);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 0, 60);
 
         assertTrue(raffle.isOpen(1));
 
@@ -269,7 +275,7 @@ contract RaffleTest is Test {
 
     function test_getEntrants() public {
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 0, 60);
+        raffle.createRaffle("Test", "00D4AA", 1 ether, 0, 60);
 
         vm.prank(player1);
         raffle.buyTicket{value: 1 ether}(1);
@@ -286,9 +292,9 @@ contract RaffleTest is Test {
 
     function test_events_RaffleCreated() public {
         vm.expectEmit(true, true, false, true);
-        emit Raffle.RaffleCreated(1, creator, 1 ether, 100, block.timestamp + 60);
+        emit Raffle.RaffleCreated(1, creator, "Test Raffle", "00D4AA", 1 ether, 100, block.timestamp + 60);
 
         vm.prank(creator);
-        raffle.createRaffle(1 ether, 100, 60);
+        raffle.createRaffle("Test Raffle", "00D4AA", 1 ether, 100, 60);
     }
 }
