@@ -29,11 +29,9 @@ export default function Landing() {
         <img src="/hero-bg.png" alt="" className="hero-bg-image" />
         <div className="hero-content">
           <div className="hero-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="10" stroke="#00D4AA" strokeWidth="2" fill="none"/>
-              <circle cx="12" cy="12" r="4" fill="#00D4AA"/>
-              <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#00D4AA" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
+            <div className="badge-logo-wrapper">
+              <img src="/botchain-logo.png" alt="BOT Chain" className="badge-logo" />
+            </div>
             Live on BOT Chain Testnet</div>
           <h1 className="hero-title">
             Payment & Raffle<br />

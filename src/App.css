@@ -164,8 +164,8 @@ a:hover { opacity: 0.85; }
 }
 
 .hero-badge {
-  display: inline-flex; align-items: center; gap: 5px;
-  padding: 5px 12px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px 5px 8px;
   background: var(--accent-dim);
   border: 1px solid var(--accent-mid);
   border-radius: 20px;
@@ -174,6 +174,24 @@ a:hover { opacity: 0.85; }
   font-weight: 500; color: var(--accent);
   letter-spacing: 0.03em;
   margin-bottom: clamp(12px, 2vw, 18px);
+}
+
+.badge-logo-wrapper {
+  width: clamp(18px, 2.2vw, 26px);
+  height: clamp(18px, 2.2vw, 26px);
+  background: #fff;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.badge-logo {
+  width: 65%;
+  height: 65%;
+  object-fit: contain;
+  display: block;
 }
 
 .hero-title {
