@@ -1,19 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ethers } from "ethers";
-
-// localStorage helpers for raffle metadata
-const META_KEY = "botchain_raffle_meta";
-function getMetaMap() {
-  try { return JSON.parse(localStorage.getItem(META_KEY) || "{}"); } catch { return {}; }
-}
-function saveMeta(id, meta) {
-  const map = getMetaMap();
-  map[id] = meta;
-  localStorage.setItem(META_KEY, JSON.stringify(map));
-}
-function getMeta(id) {
-  return getMetaMap()[id] || {};
-}
 
 export default function Raffle({ provider, account, getContract, setStatus }) {
   const [view, setView] = useState("create"); // "create" or "buy"
@@ -51,7 +37,14 @@ export default function Raffle({ provider, account, getContract, setStatus }) {
       const signer = await provider.getSigner();
       const contract = getContract(signer);
 
+      // Strip # from color for on-chain storage
+      const colorHex = raffleColor.replace("#", "");
+
       const tx = await contract.createRaffle(
+        raffleName.trim(),
+        raffleTitle.trim(),
+        communityName.trim(),
+        colorHex,
         ethers.parseEther(ticketPrice),
         parseInt(maxTickets) || 0,
         parseInt(duration)
@@ -61,26 +54,14 @@ export default function Raffle({ provider, account, getContract, setStatus }) {
       const receipt = await tx.wait();
 
       // Get raffle ID from event
-      const raffleCreatedLog = receipt.logs.find(
-        (l) => {
-          try { return contract.interface.parseLog(l)?.name === "RaffleCreated"; } catch { return false; }
-        }
-      );
+      const raffleCreatedLog = receipt.logs.find((l) => {
+        try { return contract.interface.parseLog(l)?.name === "RaffleCreated"; } catch { return false; }
+      });
       const newId = raffleCreatedLog
         ? Number(contract.interface.parseLog(raffleCreatedLog).args.raffleId)
-        : null;
+        : "?";
 
-      // Save metadata to localStorage
-      if (newId) {
-        saveMeta(newId, {
-          name: raffleName.trim(),
-          title: raffleTitle.trim(),
-          community: communityName.trim(),
-          color: raffleColor,
-        });
-      }
-
-      setStatus(`✅ Raffle #${newId || "?"} created! TX: ${receipt.hash.slice(0, 10)}...`);
+      setStatus(`✅ Raffle #${newId} created! TX: ${receipt.hash.slice(0, 10)}...`);
       setRaffleName("");
       setRaffleTitle("");
       setCommunityName("");
@@ -110,11 +91,14 @@ export default function Raffle({ provider, account, getContract, setStatus }) {
       const contract = getContract(provider);
       const info = await contract.getRaffle(parseInt(raffleId));
       const isOpen = await contract.isOpen(parseInt(raffleId));
-      const meta = getMeta(parseInt(raffleId));
 
       setFetchedRaffle({
         id: parseInt(raffleId),
         creator: info.creator,
+        name: info.name,
+        title: info.title,
+        community: info.community,
+        color: info.color,
         ticketPrice: info.ticketPrice,
         maxTickets: Number(info.maxTickets),
         totalCollected: info.totalCollected,
@@ -125,7 +109,6 @@ export default function Raffle({ provider, account, getContract, setStatus }) {
         drawn: info.drawn,
         cancelled: info.cancelled,
         isOpen,
-        meta,
       });
       setStatus("");
     } catch (err) {
@@ -162,7 +145,6 @@ export default function Raffle({ provider, account, getContract, setStatus }) {
       await tx.wait();
 
       setStatus(`✅ Ticket purchased for Raffle #${fetchedRaffle.id}!`);
-      // Re-fetch to update ticket count
       handleFetchRaffle();
     } catch (err) {
       setStatus(`❌ Failed: ${err.reason || err.message}`);
@@ -223,7 +205,7 @@ export default function Raffle({ provider, account, getContract, setStatus }) {
     return `${Math.floor(diff / 3600)}h ${Math.floor((diff % 3600) / 60)}m`;
   }
 
-  const color = fetchedRaffle?.meta?.color || "#00D4AA";
+  const color = fetchedRaffle?.color ? `#${fetchedRaffle.color}` : "#00D4AA";
 
   return (
     <div className="raffle">
@@ -357,14 +339,14 @@ export default function Raffle({ provider, account, getContract, setStatus }) {
               <div className="banner-header">
                 <div className="banner-title-area">
                   <span className="banner-id">#{fetchedRaffle.id}</span>
-                  {fetchedRaffle.meta.name && (
-                    <h3 className="banner-name">{fetchedRaffle.meta.name}</h3>
+                  {fetchedRaffle.name && (
+                    <h3 className="banner-name">{fetchedRaffle.name}</h3>
                   )}
-                  {fetchedRaffle.meta.title && (
-                    <p className="banner-subtitle">{fetchedRaffle.meta.title}</p>
+                  {fetchedRaffle.title && (
+                    <p className="banner-subtitle">{fetchedRaffle.title}</p>
                   )}
-                  {fetchedRaffle.meta.community && (
-                    <span className="banner-community">{fetchedRaffle.meta.community}</span>
+                  {fetchedRaffle.community && (
+                    <span className="banner-community">{fetchedRaffle.community}</span>
                   )}
                 </div>
                 <span className={`badge ${fetchedRaffle.isOpen ? "open" : fetchedRaffle.drawn ? "done" : "closed"}`}>

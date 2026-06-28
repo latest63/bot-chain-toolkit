@@ -14,7 +14,7 @@ export const BOT_CHAIN_CONFIG = {
 // Contract addresses (updated after deployment)
 export const CONTRACTS = {
   batchSplitter: "0xd43C01AA7C040315Cd0Fc9eB6B27130d34180205",
-  raffle: "0xbEB798aEE5dA6b2059CafA53a804874F24F6D8f4",
+  raffle: "0x13c87c9a2212567c1bcf8df1a00154045d47cc31",
 };
 
 // ABIs

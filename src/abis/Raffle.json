@@ -43,6 +43,26 @@
     "name": "createRaffle",
     "inputs": [
       {
+        "name": "_name",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "_title",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "_community",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "_color",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
         "name": "_ticketPrice",
         "type": "uint256",
         "internalType": "uint256"
@@ -119,6 +139,26 @@
             "name": "creator",
             "type": "address",
             "internalType": "address"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "community",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "color",
+            "type": "string",
+            "internalType": "string"
           },
           {
             "name": "ticketPrice",
@@ -241,6 +281,26 @@
         "name": "creator",
         "type": "address",
         "internalType": "address"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "community",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "color",
+        "type": "string",
+        "internalType": "string"
       },
       {
         "name": "ticketPrice",
@@ -367,6 +427,30 @@
         "type": "address",
         "indexed": true,
         "internalType": "address"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "community",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "color",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
       },
       {
         "name": "ticketPrice",
