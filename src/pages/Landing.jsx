@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { CONTRACTS } from "../contracts";
 
 export default function Landing() {
+  const [navOpen, setNavOpen] = useState(false);
+
   return (
     <div className="landing">
       {/* Nav */}
@@ -16,12 +19,28 @@ export default function Landing() {
             <span className="brand-text">BOT Chain Toolkit</span>
           </div>
           <div className="nav-links">
-            <a href="#features">Features</a>
-            <a href="#how">How It Works</a>
+            <a href="#features" onClick={() => setNavOpen(false)}>Features</a>
+            <a href="#how" onClick={() => setNavOpen(false)}>How It Works</a>
             <a href="https://scan.bohr.life" target="_blank" rel="noreferrer">Explorer</a>
           </div>
           <Link to="/tools" className="btn-primary">Launch App →</Link>
+          <button className="landing-hamburger" onClick={() => setNavOpen(!navOpen)} aria-label="Menu">
+            <span className={`hamburger-line ${navOpen ? "open" : ""}`} />
+            <span className={`hamburger-line ${navOpen ? "open" : ""}`} />
+            <span className={`hamburger-line ${navOpen ? "open" : ""}`} />
+          </button>
         </div>
+        {navOpen && (
+          <>
+            <div className="landing-overlay" onClick={() => setNavOpen(false)} />
+            <div className="landing-mobile-menu">
+              <a href="#features" className="landing-mobile-link" onClick={() => setNavOpen(false)}>Features</a>
+              <a href="#how" className="landing-mobile-link" onClick={() => setNavOpen(false)}>How It Works</a>
+              <a href="https://scan.bohr.life" target="_blank" rel="noreferrer" className="landing-mobile-link" onClick={() => setNavOpen(false)}>Explorer</a>
+              <Link to="/tools" className="landing-mobile-link launch" onClick={() => setNavOpen(false)}>Launch App →</Link>
+            </div>
+          </>
+        )}
       </nav>
 
       {/* Hero */}

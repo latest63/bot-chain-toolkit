@@ -1062,7 +1062,7 @@ textarea { resize: vertical; min-height: 50px; }
 
 .mode-toggle button {
   flex: 1;
-  padding: clamp(6px, 1vw, 8px) clamp(12px, 1.5vw, 16px);
+  padding: clamp(10px, 1.5vw, 12px) clamp(12px, 1.5vw, 16px);
   background: transparent; border: none;
   border-radius: 5px;
   color: var(--text-tertiary);
@@ -1264,6 +1264,43 @@ textarea { resize: vertical; min-height: 50px; }
 /* ═══════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════ */
+/* Landing hamburger */
+.landing-hamburger {
+  display: none; background: none; border: none; cursor: pointer;
+  flex-direction: column; gap: 4px; padding: 4px; margin-left: 12px;
+}
+.landing-hamburger .hamburger-line {
+  display: block; width: 18px; height: 2px;
+  background: var(--text-tertiary); border-radius: 1px; transition: all 0.2s;
+}
+.landing-hamburger .hamburger-line.open:nth-child(1) { transform: rotate(45deg) translate(4px, 4px); }
+.landing-hamburger .hamburger-line.open:nth-child(2) { opacity: 0; }
+.landing-hamburger .hamburger-line.open:nth-child(3) { transform: rotate(-45deg) translate(4px, -4px); }
+
+.landing-overlay {
+  position: fixed; inset: 0; z-index: 90;
+}
+
+.landing-mobile-menu {
+  position: absolute; top: 100%; right: clamp(8px, 2vw, 16px); left: clamp(8px, 2vw, 16px);
+  background: var(--bg-surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 6px; z-index: 100;
+  display: flex; flex-direction: column; gap: 2px;
+}
+
+.landing-mobile-link {
+  display: block; padding: 10px 14px; border-radius: var(--radius-xs);
+  font-family: "Poppins", sans-serif; font-size: 0.85rem;
+  color: var(--text-secondary); text-decoration: none; transition: all 0.15s;
+}
+.landing-mobile-link:hover,
+.landing-mobile-link.active { background: var(--accent-dim); color: var(--accent); }
+.landing-mobile-link.launch {
+  background: linear-gradient(135deg, #00D4AA, #00b894); color: #0a0b0c !important;
+  text-align: center; margin-top: 4px;
+  font-family: "Oswald", sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;
+}
+
 @media (max-width: 768px) {
   .hero {
     min-height: auto;
@@ -1271,7 +1308,10 @@ textarea { resize: vertical; min-height: 50px; }
     padding-bottom: 40px;
   }
 
+  .landing-hamburger { display: flex; }
   .nav-links { display: none; }
+
+  .nav-inner .btn-primary { display: none; }
 
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
 
@@ -1293,4 +1333,33 @@ textarea { resize: vertical; min-height: 50px; }
 
   .features-grid { grid-template-columns: 1fr; }
   .contract-cards { grid-template-columns: 1fr; }
+
+  .fetch-row { flex-direction: column; gap: 8px; }
+  .fetch-row .btn.fetch { width: 100%; text-align: center; padding: 12px; }
+
+  .custom-row { flex-direction: column; gap: 6px; }
+  .custom-row input:first-child,
+  .custom-row input:nth-child(2) { width: 100%; flex: none; }
+
+  .modal { max-width: 100%; max-height: 90vh; margin: 0; border-radius: var(--radius-sm); }
+
+  .banner-stats { grid-template-columns: 1fr 1fr; }
+
+  .status { font-size: 0.6rem; padding: 8px 10px; }
+
+  .app { padding: 0 8px; }
+
+  input, textarea { font-size: 16px !important; }
+
+  .banner-actions { flex-direction: column; align-items: stretch; }
+  .banner-actions .btn.submit { max-width: 100%; width: 100%; }
+
+  form .btn.submit { width: 100%; }
+
+  .card-actions { flex-direction: column; }
+  .card-actions .btn.small { width: 100%; text-align: center; }
+
+  .contract-link { word-break: break-all; }
+
+  .landing-mobile-menu { right: 8px; left: 8px; }
 }
