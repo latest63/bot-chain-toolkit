@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scene 3 — Raffle System</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #08080e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+    overflow: hidden;
+  }
+  .frame {
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    background: radial-gradient(ellipse at 50% 40%, #0c0c1a 0%, #08080e 60%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,170,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,170,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .tool-label {
+    position: absolute;
+    left: 80px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: left center;
+    font-size: 14px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: rgba(0,212,170,0.25);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+  .tool-label::before {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 1px;
+    background: rgba(0,212,170,0.2);
+    vertical-align: middle;
+    margin-right: 16px;
+  }
+
+  /* Mac window */
+  .mac-window {
+    width: 880px;
+    background: #0e0e16;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 0 80px rgba(0,212,170,0.04), 0 30px 80px rgba(0,0,0,0.6);
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+  }
+  .mac-titlebar {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    background: #12121c;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .mac-dots { display: flex; gap: 8px; }
+  .mac-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .mac-dot:nth-child(1) { background: #ff5f57; }
+  .mac-dot:nth-child(2) { background: #febc2e; }
+  .mac-dot:nth-child(3) { background: #28c840; }
+  .mac-title {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+  }
+
+  .tool-body {
+    padding: 32px 36px 36px;
+  }
+
+  .tool-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+  }
+  .tool-header-left h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .tool-header-left p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.35);
+    font-family: 'Inter', sans-serif;
+    margin-top: 4px;
+  }
+  .badge-raffle {
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: rgba(0,212,170,0.1);
+    color: #00D4AA;
+    border: 1px solid rgba(0,212,170,0.2);
+  }
+
+  /* Raffle banner */
+  .raffle-banner {
+    position: relative;
+    padding: 28px 30px;
+    background: linear-gradient(135deg, rgba(0,212,170,0.08), rgba(0,212,170,0.02));
+    border: 1px solid rgba(0,212,170,0.12);
+    border-radius: 14px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .raffle-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #00D4AA, transparent);
+    opacity: 0.6;
+  }
+  .banner-glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(0,212,170,0.06);
+    border-radius: 50%;
+    filter: blur(60px);
+    top: -60px; right: -40px;
+  }
+  .banner-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .banner-id-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 14px;
+    background: rgba(0,212,170,0.1);
+    border-radius: 100px;
+    font-size: 13px;
+    color: #00D4AA;
+    font-weight: 600;
+  }
+  .banner-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    margin-top: 12px;
+  }
+  .banner-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.35);
+    font-family: 'Inter', sans-serif;
+    margin-top: 4px;
+  }
+  .banner-status {
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    background: rgba(0,212,170,0.15);
+    color: #00D4AA;
+  }
+
+  /* Stats row */
+  .banner-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .banner-stat {
+    padding: 12px 16px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.03);
+  }
+  .banner-stat .slabel {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.25);
+    margin-bottom: 4px;
+  }
+  .banner-stat .svalue {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .banner-stat .svalue.green { color: #00D4AA; }
+
+  /* Ticket counter animation */
+  .ticket-counter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 10px;
+    margin-bottom: 16px;
+  }
+  .ticket-counter .label {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    font-family: 'Inter', sans-serif;
+  }
+  .ticket-counter .count-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .ticket-counter .count-num {
+    font-size: 28px;
+    font-weight: 700;
+    color: #00D4AA;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ticket-dot {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #00D4AA;
+    animation: blink 1.2s infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  /* Action buttons */
+  .raffle-actions {
+    display: flex;
+    gap: 12px;
+  }
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    border: none;
+    cursor: default;
+    text-align: center;
+  }
+  .btn-primary-action {
+    background: #00D4AA;
+    color: #08080e;
+    box-shadow: 0 0 24px rgba(0,212,170,0.15);
+  }
+  .btn-secondary-action {
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.5);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Right stat panel */
+  .raffle-stats-panel {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 2;
+  }
+  .mini-stat {
+    padding: 18px 24px;
+    background: rgba(14,14,22,0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 12px;
+    text-align: center;
+    min-width: 140px;
+  }
+  .mini-stat .num {
+    font-size: 28px;
+    font-weight: 800;
+    color: #00D4AA;
+  }
+  .mini-stat .desc {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.25);
+    margin-top: 4px;
+  }
+
+  /* Confetti particles positioned around the banner */
+  .confetti {
+    position: absolute;
+    width: 6px; height: 6px;
+    border-radius: 2px;
+    opacity: 0;
+    animation: confettiFall 2s ease-out forwards;
+  }
+  .confetti:nth-child(1) { background: #00D4AA; top: 20%; left: 10%; animation-delay: 0s; }
+  .confetti:nth-child(2) { background: #FFD700; top: 30%; left: 20%; animation-delay: 0.2s; }
+  .confetti:nth-child(3) { background: #FF69B4; top: 15%; left: 35%; animation-delay: 0.4s; }
+  .confetti:nth-child(4) { background: #00D4AA; top: 25%; left: 50%; animation-delay: 0.1s; }
+  .confetti:nth-child(5) { background: #FFD700; top: 35%; left: 65%; animation-delay: 0.3s; }
+  .confetti:nth-child(6) { background: #00D4AA; top: 20%; left: 75%; animation-delay: 0.5s; }
+  .confetti:nth-child(7) { background: #FF69B4; top: 10%; left: 85%; animation-delay: 0.15s; }
+  .confetti:nth-child(8) { background: #00FFD0; top: 40%; left: 15%; animation-delay: 0.35s; }
+  .confetti:nth-child(9) { background: #FFD700; top: 18%; left: 60%; animation-delay: 0.45s; }
+  .confetti:nth-child(10) { background: #00D4AA; top: 28%; left: 40%; animation-delay: 0.25s; }
+  .confetti:nth-child(11) { background: #FF69B4; top: 22%; left: 30%; animation-delay: 0.55s; }
+  .confetti:nth-child(12) { background: #00FFD0; top: 32%; left: 55%; animation-delay: 0.05s; }
+
+  @keyframes confettiFall {
+    0% { opacity: 0; transform: translateY(-40px) rotate(0deg) scale(0.5); }
+    20% { opacity: 1; transform: translateY(0) rotate(180deg) scale(1.2); }
+    100% { opacity: 0; transform: translateY(60px) rotate(360deg) scale(0.3); }
+  }
+
+  .glow-accent {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .glow-raffle {
+    width: 500px; height: 500px;
+    background: rgba(0,212,170,0.04);
+    top: -200px; left: 20%;
+  }
+
+  .tagline {
+    position: absolute;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 300;
+    z-index: 2;
+  }
+
+  .corner { position: absolute; width: 50px; height: 50px; opacity: 0.1; }
+  .corner-tl { top: 30px; left: 30px; border-top: 1px solid #00D4AA; border-left: 1px solid #00D4AA; }
+  .corner-br { bottom: 30px; right: 30px; border-bottom: 1px solid #00D4AA; border-right: 1px solid #00D4AA; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="grid"></div>
+  <div class="glow-raffle glow-accent"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="tool-label">Raffle System</div>
+
+  <!-- Mac window -->
+  <div class="mac-window">
+    <div class="mac-titlebar">
+      <div class="mac-dots">
+        <div class="mac-dot"></div>
+        <div class="mac-dot"></div>
+        <div class="mac-dot"></div>
+      </div>
+      <div class="mac-title">BOT Chain Toolkit — Raffle</div>
+    </div>
+
+    <div class="tool-body">
+      <div class="tool-header">
+        <div class="tool-header-left">
+          <h2>🎟️ On-Chain Raffle</h2>
+          <p>Verifiably fair. Permissionless. Community-powered.</p>
+        </div>
+        <div class="badge-raffle">Blockhash Random</div>
+      </div>
+
+      <!-- Raffle banner -->
+      <div class="raffle-banner">
+        <div class="banner-glow"></div>
+        <!-- Confetti -->
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+        <div class="confetti"></div>
+
+        <div class="banner-top">
+          <div>
+            <div class="banner-id-badge">
+              <span>🏆</span> Raffle #42
+            </div>
+            <div class="banner-title">Weekly Community Giveaway</div>
+            <div class="banner-sub">by BOT Builders</div>
+          </div>
+          <div class="banner-status">🟢 Open</div>
+        </div>
+
+        <div class="banner-stats">
+          <div class="banner-stat">
+            <div class="slabel">Ticket Price</div>
+            <div class="svalue green">0.1 BOT</div>
+          </div>
+          <div class="banner-stat">
+            <div class="slabel">Tickets Sold</div>
+            <div class="svalue">47</div>
+          </div>
+          <div class="banner-stat">
+            <div class="slabel">Prize Pool</div>
+            <div class="svalue green">4.7 BOT</div>
+          </div>
+          <div class="banner-stat">
+            <div class="slabel">Time Left</div>
+            <div class="svalue">2h 14m</div>
+          </div>
+        </div>
+
+        <!-- Live ticket counter -->
+        <div class="ticket-counter">
+          <span class="label">Live ticket purchases</span>
+          <div class="count-wrap">
+            <span class="ticket-dot"></span>
+            <span class="count-num" id="ticketCount">47</span>
+            <span style="font-size:13px;color:rgba(255,255,255,0.25);font-family:'Inter',sans-serif;">tickets</span>
+          </div>
+        </div>
+
+        <div class="raffle-actions">
+          <div class="btn btn-primary-action">🎟️ Buy Ticket</div>
+          <div class="btn btn-secondary-action">🎲 Draw Winner</div>
+        </div>
+      </div>
+
+      <!-- Winner announcement if drawn -->
+      <div style="padding:16px 20px;background:linear-gradient(135deg,rgba(255,215,0,0.06),rgba(255,215,0,0.02));border:1px solid rgba(255,215,0,0.12);border-radius:10px;display:flex;align-items:center;gap:14px;">
+        <span style="font-size:24px;">🏆</span>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:#FFD700;">Winner Drawn</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.4);font-family:'JetBrains Mono',monospace;margin-top:2px;">0x7D4e...91aB won 4.7 BOT</div>
+        </div>
+        <div style="margin-left:auto;padding:6px 14px;background:rgba(255,215,0,0.1);border-radius:100px;font-size:12px;color:#FFD700;font-weight:600;">TX Confirmed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right side stats -->
+  <div class="raffle-stats-panel">
+    <div class="mini-stat">
+      <div class="num">47</div>
+      <div class="desc">Tickets Sold</div>
+    </div>
+    <div class="mini-stat">
+      <div class="num">4.7</div>
+      <div class="desc">Prize Pool (BOT)</div>
+    </div>
+    <div class="mini-stat" style="border-color:rgba(255,215,0,0.1);">
+      <div class="num" style="color:#FFD700;">🏆</div>
+      <div class="desc">Winner Drawn</div>
+    </div>
+  </div>
+
+  <div class="tagline">Fair. Transparent. On-chain.</div>
+</div>
+</body>
+</html>

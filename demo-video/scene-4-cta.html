@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scene 4 — Call to Action</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #08080e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+    overflow: hidden;
+  }
+  .frame {
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    background: radial-gradient(ellipse at 50% 30%, #0d0d1a 0%, #08080e 60%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    padding: 60px 80px;
+  }
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,170,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,170,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .corner { position: absolute; width: 60px; height: 60px; opacity: 0.1; }
+  .corner-tl { top: 30px; left: 30px; border-top: 1px solid #00D4AA; border-left: 1px solid #00D4AA; }
+  .corner-tr { top: 30px; right: 30px; border-top: 1px solid #00D4AA; border-right: 1px solid #00D4AA; }
+  .corner-bl { bottom: 30px; left: 30px; border-bottom: 1px solid #00D4AA; border-left: 1px solid #00D4AA; }
+  .corner-br { bottom: 30px; right: 30px; border-bottom: 1px solid #00D4AA; border-right: 1px solid #00D4AA; }
+
+  /* Top section - headline */
+  .hero-section {
+    text-align: center;
+    position: relative;
+    z-index: 2;
+    margin-top: 20px;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 18px;
+    background: rgba(0,212,170,0.08);
+    border: 1px solid rgba(0,212,170,0.15);
+    border-radius: 100px;
+    font-size: 13px;
+    color: #00D4AA;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    font-size: 52px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -1.5px;
+    line-height: 1.15;
+  }
+  .hero-title span {
+    background: linear-gradient(135deg, #00D4AA 0%, #00FFD0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: 18px;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Inter', sans-serif;
+    margin-top: 12px;
+    font-weight: 400;
+  }
+
+  /* Dashboard cards area */
+  .dashboard-area {
+    display: flex;
+    gap: 28px;
+    margin-top: 40px;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  /* Tool card */
+  .tool-card {
+    flex: 1;
+    background: rgba(14,14,22,0.7);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+    transition: none;
+    position: relative;
+  }
+  .tool-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .tool-card.splitter::before { background: linear-gradient(90deg, transparent, #00D4AA, transparent); }
+  .tool-card.raffle::before { background: linear-gradient(90deg, transparent, #00D4AA, transparent); }
+
+  .card-header {
+    padding: 20px 24px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .card-header .icon-bg {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .card-header .icon-bg.splitter { background: rgba(0,212,170,0.1); }
+  .card-header .icon-bg.raffle { background: rgba(0,212,170,0.1); }
+
+  .card-body {
+    padding: 0 24px 20px;
+  }
+  .card-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.35);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .card-stat-row {
+    display: flex;
+    gap: 12px;
+  }
+  .card-stat {
+    flex: 1;
+    padding: 12px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.03);
+    text-align: center;
+  }
+  .card-stat .num {
+    font-size: 20px;
+    font-weight: 700;
+    color: #00D4AA;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .card-stat .lbl {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.2);
+    margin-top: 2px;
+  }
+
+  /* More coming badge */
+  .more-badge-area {
+    position: relative;
+    z-index: 2;
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .more-badge {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 28px;
+    background: rgba(0,212,170,0.06);
+    border: 1px solid rgba(0,212,170,0.1);
+    border-radius: 100px;
+  }
+  .pulse-dot {
+    width: 10px; height: 10px;
+    background: #00D4AA;
+    border-radius: 50%;
+    animation: pulseGlow 1.5s infinite;
+  }
+  @keyframes pulseGlow {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0,212,170,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(0,212,170,0); }
+  }
+  .more-badge .text {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    font-weight: 500;
+  }
+  .more-badge .text strong { color: #00D4AA; }
+
+  .more-tools {
+    display: flex;
+    gap: 10px;
+  }
+  .more-tool-icon {
+    width: 40px; height: 40px;
+    background: rgba(255,255,255,0.03);
+    border: 1px dashed rgba(255,255,255,0.08);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: rgba(255,255,255,0.15);
+  }
+
+  /* Global stats bar */
+  .stats-bar {
+    display: flex;
+    gap: 40px;
+    margin-top: 28px;
+    padding: 18px 40px;
+    background: rgba(14,14,22,0.5);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 14px;
+    position: relative;
+    z-index: 2;
+  }
+  .stat-item {
+    text-align: center;
+  }
+  .stat-item .num {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .stat-item .num.green { color: #00D4AA; }
+  .stat-item .lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.2);
+    margin-top: 2px;
+  }
+  .stat-divider {
+    width: 1px;
+    background: rgba(255,255,255,0.06);
+  }
+
+  /* Footer logo lockup */
+  .footer-lockup {
+    position: absolute;
+    bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 2;
+  }
+  .footer-lockup .brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-lockup .brand svg { width: 20px; height: 20px; }
+  .footer-lockup .brand span {
+    font-size: 15px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .footer-lockup .divider-dot {
+    width: 4px; height: 4px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 50%;
+  }
+  .footer-lockup .tagline {
+    font-size: 14px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+  .footer-lockup .tagline strong { color: rgba(0,212,170,0.4); }
+
+  /* Glows */
+  .glow-accent {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .glow-center {
+    width: 600px; height: 300px;
+    background: rgba(0,212,170,0.03);
+    top: 35%; left: 50%;
+    transform: translateX(-50%);
+  }
+  .glow-left {
+    width: 350px; height: 350px;
+    background: rgba(0,212,170,0.02);
+    bottom: -100px; left: -100px;
+  }
+  .glow-right {
+    width: 350px; height: 350px;
+    background: rgba(0,212,170,0.02);
+    bottom: -100px; right: -100px;
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="grid"></div>
+  <div class="glow-center glow-accent"></div>
+  <div class="glow-left glow-accent"></div>
+  <div class="glow-right glow-accent"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <!-- Headline -->
+  <div class="hero-section">
+    <div class="hero-badge">✦ BOT Chain Toolkit</div>
+    <h1 class="hero-title">
+      Built for Communities<br>
+      Building on <span>BOT Chain</span>
+    </h1>
+    <p class="hero-sub">Two tools today. Many more on the way.</p>
+  </div>
+
+  <!-- Dashboard cards -->
+  <div class="dashboard-area">
+    <!-- Splitter card -->
+    <div class="tool-card splitter">
+      <div class="card-header">
+        <h3>💸 Batch Splitter</h3>
+        <div class="icon-bg splitter">↗</div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">Send BOT to hundreds of recipients in a single transaction. Equal split or custom amounts. Gas-efficient.</div>
+        <div class="card-stat-row">
+          <div class="card-stat">
+            <div class="num">842</div>
+            <div class="lbl">Transactions</div>
+          </div>
+          <div class="card-stat">
+            <div class="num">12.4K</div>
+            <div class="lbl">BOT Distributed</div>
+          </div>
+          <div class="card-stat">
+            <div class="num">91%</div>
+            <div class="lbl">Gas Saved</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Raffle card -->
+    <div class="tool-card raffle">
+      <div class="card-header">
+        <h3>🎟️ On-Chain Raffle</h3>
+        <div class="icon-bg raffle">✦</div>
+      </div>
+      <div class="card-body">
+        <div class="card-desc">Launch verifiably fair giveaways. Blockhash randomness. Permissionless — anyone can create or enter.</div>
+        <div class="card-stat-row">
+          <div class="card-stat">
+            <div class="num">89</div>
+            <div class="lbl">Raffles Created</div>
+          </div>
+          <div class="card-stat">
+            <div class="num">47</div>
+            <div class="lbl">Winners Paid</div>
+          </div>
+          <div class="card-stat">
+            <div class="num">#00D4</div>
+            <div class="lbl">Brand Color</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- More coming -->
+  <div class="more-badge-area">
+    <div class="more-badge">
+      <div class="pulse-dot"></div>
+      <span class="text">More tools <strong>coming soon</strong></span>
+    </div>
+    <div class="more-tools">
+      <div class="more-tool-icon">🔮</div>
+      <div class="more-tool-icon">⚡</div>
+      <div class="more-tool-icon">🔗</div>
+    </div>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <div class="num green">1,247</div>
+      <div class="lbl">BOT Distributed</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="num green">89</div>
+      <div class="lbl">Raffles Created</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="num">2</div>
+      <div class="lbl">Live Tools</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <div class="num green">∞</div>
+      <div class="lbl">Possibilities</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-lockup">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="10" stroke="#00D4AA" stroke-width="2" fill="none"/>
+        <circle cx="12" cy="12" r="4" fill="#00D4AA"/>
+        <path d="M12 2v4M12 18v4M2 12h4M18 12h4" stroke="#00D4AA" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>BOT Chain Toolkit</span>
+    </div>
+    <div class="divider-dot"></div>
+    <div class="tagline"><strong>✦</strong> &nbsp; Launch. Distribute. Grow. &nbsp; <strong>✦</strong></div>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scene 2 — Batch Splitter</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #08080e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Outfit', sans-serif;
+    overflow: hidden;
+  }
+  .frame {
+    width: 1920px;
+    height: 1080px;
+    position: relative;
+    background: radial-gradient(ellipse at 50% 45%, #0c0c1a 0%, #08080e 60%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,212,170,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,212,170,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  /* Left side — Tool label */
+  .tool-label {
+    position: absolute;
+    left: 80px;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: left center;
+    font-size: 14px;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: rgba(0,212,170,0.25);
+    font-weight: 400;
+    white-space: nowrap;
+  }
+  .tool-label::before {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 1px;
+    background: rgba(0,212,170,0.2);
+    vertical-align: middle;
+    margin-right: 16px;
+  }
+
+  /* Mac window frame */
+  .mac-window {
+    width: 860px;
+    background: #0e0e16;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 0 80px rgba(0,212,170,0.04), 0 30px 80px rgba(0,0,0,0.6);
+    overflow: hidden;
+    position: relative;
+    z-index: 2;
+  }
+  .mac-titlebar {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    background: #12121c;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .mac-dots { display: flex; gap: 8px; }
+  .mac-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+  }
+  .mac-dot:nth-child(1) { background: #ff5f57; }
+  .mac-dot:nth-child(2) { background: #febc2e; }
+  .mac-dot:nth-child(3) { background: #28c840; }
+  .mac-title {
+    flex: 1;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+  }
+
+  /* Tool body */
+  .tool-body {
+    padding: 36px 40px 40px;
+  }
+  .tool-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+  .tool-header-left h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .tool-header-left p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.35);
+    font-family: 'Inter', sans-serif;
+    margin-top: 4px;
+  }
+  .badge {
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .badge-splitter {
+    background: rgba(0,212,170,0.1);
+    color: #00D4AA;
+    border: 1px solid rgba(0,212,170,0.2);
+  }
+
+  /* Mode tabs */
+  .mode-tabs {
+    display: flex;
+    gap: 2px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 10px;
+    padding: 3px;
+    margin-bottom: 28px;
+  }
+  .mode-tab {
+    flex: 1;
+    padding: 10px;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.3);
+    cursor: default;
+    font-family: 'Inter', sans-serif;
+    transition: none;
+  }
+  .mode-tab.active {
+    background: rgba(0,212,170,0.12);
+    color: #00D4AA;
+  }
+
+  /* Address list */
+  .address-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+  .address-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 8px;
+  }
+  .address-row .idx {
+    width: 22px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+  }
+  .address-row .addr {
+    flex: 1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+  }
+  .address-row .amt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: #00D4AA;
+  }
+  .address-row .status-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(0,212,170,0.3);
+  }
+  .address-row.sent .status-dot { background: #00D4AA; box-shadow: 0 0 8px rgba(0,212,170,0.3); }
+  .address-row.sent { border-color: rgba(0,212,170,0.15); }
+
+  /* Gas savings */
+  .gas-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, rgba(0,212,170,0.06), rgba(0,212,170,0.02));
+    border: 1px solid rgba(0,212,170,0.1);
+    border-radius: 10px;
+    margin-bottom: 24px;
+  }
+  .gas-banner .label {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    font-family: 'Inter', sans-serif;
+  }
+  .gas-banner .value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #00D4AA;
+  }
+  .gas-banner .value small {
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.3);
+  }
+
+  /* Success pulse */
+  .success-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 20px;
+    background: rgba(0,212,170,0.06);
+    border: 1px solid rgba(0,212,170,0.15);
+    border-radius: 10px;
+  }
+  .success-check {
+    width: 28px;
+    height: 28px;
+    background: #00D4AA;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #08080e;
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .success-bar .text {
+    flex: 1;
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    font-family: 'Inter', sans-serif;
+  }
+  .success-bar .tx-hash {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: rgba(255,255,255,0.2);
+  }
+
+  /* Glow accents */
+  .glow-accent {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .glow-1 {
+    width: 400px; height: 400px;
+    background: rgba(0,212,170,0.04);
+    top: -120px; right: -100px;
+  }
+  .glow-2 {
+    width: 300px; height: 300px;
+    background: rgba(0,212,170,0.03);
+    bottom: -80px; left: -80px;
+  }
+
+  /* Bottom tagline */
+  .tagline {
+    position: absolute;
+    bottom: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    color: rgba(255,255,255,0.15);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: 300;
+  }
+
+  /* Stat counter on right */
+  .stat-card {
+    position: absolute;
+    right: 80px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 24px 32px;
+    background: rgba(14,14,22,0.8);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 14px;
+    backdrop-filter: blur(12px);
+    text-align: center;
+  }
+  .stat-card .num {
+    font-size: 48px;
+    font-weight: 800;
+    color: #00D4AA;
+    line-height: 1;
+  }
+  .stat-card .num .pct { font-size: 24px; }
+  .stat-card .desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+    margin-top: 8px;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 0.5px;
+  }
+
+  /* Corner accents */
+  .corner { position: absolute; width: 50px; height: 50px; opacity: 0.1; }
+  .corner-tl { top: 30px; left: 30px; border-top: 1px solid #00D4AA; border-left: 1px solid #00D4AA; }
+  .corner-br { bottom: 30px; right: 30px; border-bottom: 1px solid #00D4AA; border-right: 1px solid #00D4AA; }
+</style>
+</head>
+<body>
+<div class="frame">
+  <div class="grid"></div>
+  <div class="glow-1 glow-accent"></div>
+  <div class="glow-2 glow-accent"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="tool-label">Batch Splitter</div>
+
+  <!-- Mac window -->
+  <div class="mac-window">
+    <div class="mac-titlebar">
+      <div class="mac-dots">
+        <div class="mac-dot"></div>
+        <div class="mac-dot"></div>
+        <div class="mac-dot"></div>
+      </div>
+      <div class="mac-title">BOT Chain Toolkit — Splitter</div>
+    </div>
+
+    <div class="tool-body">
+      <div class="tool-header">
+        <div class="tool-header-left">
+          <h2>💸 Batch Splitter</h2>
+          <p>Send BOT to your entire community in one transaction</p>
+        </div>
+        <div class="badge badge-splitter">Live on BOT Chain</div>
+      </div>
+
+      <div class="mode-tabs">
+        <div class="mode-tab active">Equal Split</div>
+        <div class="mode-tab">Custom Amounts</div>
+      </div>
+
+      <!-- Address list (sent state) -->
+      <div class="address-list">
+        <div class="address-row sent">
+          <span class="idx">01</span>
+          <span class="addr">0x1a2B...c8F3</span>
+          <span class="amt">0.042 BOT</span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="address-row sent">
+          <span class="idx">02</span>
+          <span class="addr">0x7D4e...91aB</span>
+          <span class="amt">0.042 BOT</span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="address-row sent">
+          <span class="idx">03</span>
+          <span class="addr">0xF92b...3E7d</span>
+          <span class="amt">0.042 BOT</span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="address-row sent">
+          <span class="idx">04</span>
+          <span class="addr">0x4cD1...AB82</span>
+          <span class="amt">0.042 BOT</span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="address-row sent">
+          <span class="idx">05</span>
+          <span class="addr">0xEf67...44F0</span>
+          <span class="amt">0.042 BOT</span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="address-row sent">
+          <span class="idx">06</span>
+          <span class="addr">0x3A9c...D711</span>
+          <span class="amt">0.042 BOT</span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="address-row sent">
+          <span class="idx">07</span>
+          <span class="addr">0xB82d...F3E9</span>
+          <span class="amt">0.042 BOT</span>
+          <span class="status-dot"></span>
+        </div>
+        <div class="address-row sent">
+          <span class="idx">08</span>
+          <span class="addr">0x5F1e...7C0A</span>
+          <span class="amt">0.042 BOT</span>
+          <span class="status-dot"></span>
+        </div>
+      </div>
+
+      <!-- Gas savings -->
+      <div class="gas-banner">
+        <span class="label">Gas saved vs. individual sends</span>
+        <span class="value">91% <small>reduction</small></span>
+      </div>
+
+      <!-- Success -->
+      <div class="success-bar">
+        <div class="success-check">✓</div>
+        <span class="text">✅ Sent <strong>0.5 BOT</strong> to <strong>12 recipients</strong></span>
+        <span class="tx-hash">0x7a3f...b1e2</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stat card -->
+  <div class="stat-card">
+    <div class="num">91<span class="pct">%</span></div>
+    <div class="desc">GAS SAVINGS</div>
+  </div>
+
+  <div class="tagline">One transaction. Everyone paid.</div>
+</div>
+</body>
+</html>
