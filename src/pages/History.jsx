@@ -297,7 +297,7 @@ export default function History() {
                   {log.event === "RaffleCancelled" && log.raffleId && (
                     <div className="history-summary">❌ Raffle #{log.raffleId}</div>
                   )}
-                  <a href={`https://scan.bohr.life/tx/${log.tx}`} target="_blank" rel="noreferrer" className="contract-link" onClick={e => e.stopPropagation()}>View Tx →</a>
+                  <a href={`https://scan.botchain.ai/tx/${log.tx}`} target="_blank" rel="noreferrer" className="contract-link" onClick={e => e.stopPropagation()}>View Tx →</a>
                 </div>
               ))}
             </div>
@@ -493,7 +493,7 @@ export default function History() {
             </div>
 
             <div className="modal-footer">
-              <a href={`https://scan.bohr.life/tx/${modalTx}`} target="_blank" rel="noreferrer" className="contract-link">View on Explorer →</a>
+              <a href={`https://scan.botchain.ai/tx/${modalTx}`} target="_blank" rel="noreferrer" className="contract-link">View on Explorer →</a>
             </div>
           </div>
         </div>

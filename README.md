@@ -84,7 +84,7 @@ cast wallet address --keystore ~/.foundry/keystores/deployer --password <your-pa
 # Deploy
 cd contracts-foundry
 forge script script/Deploy.s.sol \
-  --rpc-url https://rpc.bohr.life \
+  --rpc-url https://rpc.botchain.ai \
   --broadcast \
   --keystore ~/.foundry/keystores/deployer \
   --password <your-password>
@@ -96,7 +96,7 @@ forge script script/Deploy.s.sol \
 
 ```bash
 forge script script/Deploy.s.sol \
-  --rpc-url https://rpc.bohr.life \
+  --rpc-url https://rpc.botchain.ai \
   --broadcast \
   --ledger
 ```
@@ -107,7 +107,7 @@ forge script script/Deploy.s.sol \
 # Only use in CI pipelines — never commit .env
 export PRIVATE_KEY=0x...
 forge script script/Deploy.s.sol \
-  --rpc-url https://rpc.bohr.life \
+  --rpc-url https://rpc.botchain.ai \
   --broadcast \
   --private-key $PRIVATE_KEY
 ```
@@ -122,9 +122,9 @@ forge script script/Deploy.s.sol \
 6. Commit and push — Vercel auto-deploys
 
 ## Network Config
-- **Chain ID:** 968
-- **RPC:** https://rpc.bohr.life
-- **Explorer:** https://scan.bohr.life
+- **Chain ID:** 677
+- **RPC:** https://rpc.botchain.ai
+- **Explorer:** https://scan.botchain.ai
 - **Faucet:** https://faucet.botchain.ai/basic
 
 ## Security

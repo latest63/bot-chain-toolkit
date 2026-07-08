@@ -21,7 +21,7 @@ export default function Landing() {
           <div className="nav-links">
             <a href="#features" onClick={() => setNavOpen(false)}>Features</a>
             <a href="#how" onClick={() => setNavOpen(false)}>How It Works</a>
-            <a href="https://scan.bohr.life" target="_blank" rel="noreferrer">Explorer</a>
+            <a href="https://scan.botchain.ai" target="_blank" rel="noreferrer">Explorer</a>
           </div>
           <Link to="/tools" className="btn-primary">Launch App →</Link>
           <button className="landing-hamburger" onClick={() => setNavOpen(!navOpen)} aria-label="Menu">
@@ -36,7 +36,7 @@ export default function Landing() {
             <div className="landing-mobile-menu">
               <a href="#features" className="landing-mobile-link" onClick={() => setNavOpen(false)}>Features</a>
               <a href="#how" className="landing-mobile-link" onClick={() => setNavOpen(false)}>How It Works</a>
-              <a href="https://scan.bohr.life" target="_blank" rel="noreferrer" className="landing-mobile-link" onClick={() => setNavOpen(false)}>Explorer</a>
+              <a href="https://scan.botchain.ai" target="_blank" rel="noreferrer" className="landing-mobile-link" onClick={() => setNavOpen(false)}>Explorer</a>
               <Link to="/tools" className="landing-mobile-link launch" onClick={() => setNavOpen(false)}>Launch App →</Link>
             </div>
           </>
@@ -52,7 +52,7 @@ export default function Landing() {
             <div className="badge-logo-wrapper">
               <img src="/botchain-logo.png" alt="BOT Chain" className="badge-logo" />
             </div>
-            Live on BOT Chain Testnet</div>
+            Live on BOT Chain Mainnet</div>
           <h1 className="hero-title">
             Payment & Raffle<br />
             <span className="hero-accent">Toolkit for BOT Chain</span>
@@ -153,17 +153,17 @@ export default function Landing() {
       <section className="contracts">
         <img src="/contracts-bg.png" alt="" className="contracts-bg-image" />
         <div className="section-label">Deployed Contracts</div>
-        <h2 className="section-title">Testnet Addresses</h2>
+        <h2 className="section-title">Mainnet Addresses</h2>
         <div className="contract-cards">
           <div className="contract-card">
             <div className="contract-name">BatchSplitter</div>
             <code className="contract-addr">{CONTRACTS.batchSplitter}</code>
-            <a href={`https://scan.bohr.life/address/${CONTRACTS.batchSplitter}`} target="_blank" rel="noreferrer" className="contract-link">View on Explorer →</a>
+            <a href={`https://scan.botchain.ai/tx/0x92e47740703f974c8064f53202b90f411f3d879b2336d1dae0d4645ff38bbad5`} target="_blank" rel="noreferrer" className="contract-link">View Deployment Tx →</a>
           </div>
           <div className="contract-card">
             <div className="contract-name">Raffle</div>
             <code className="contract-addr">{CONTRACTS.raffle}</code>
-            <a href={`https://scan.bohr.life/address/${CONTRACTS.raffle}`} target="_blank" rel="noreferrer" className="contract-link">View on Explorer →</a>
+            <a href={`https://scan.botchain.ai/tx/0xc2560551003b60fe6977610ec393f01c3e6ac2a295a4761c9341c03f04020fd3`} target="_blank" rel="noreferrer" className="contract-link">View Deployment Tx →</a>
           </div>
         </div>
       </section>
@@ -176,7 +176,7 @@ export default function Landing() {
           <span>·</span>
           <a href="https://www.botchain.ai" target="_blank" rel="noreferrer">BOT Chain</a>
           <span>·</span>
-          <a href="https://scan.bohr.life" target="_blank" rel="noreferrer">Explorer</a>
+          <a href="https://scan.botchain.ai" target="_blank" rel="noreferrer">Explorer</a>
         </p>
       </footer>
     </div>
