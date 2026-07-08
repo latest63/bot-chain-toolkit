@@ -1,14 +1,14 @@
-// BOT Chain Network Config
+// BOT Chain Network Config — Mainnet
 export const BOT_CHAIN_CONFIG = {
-  chainId: "0x3C8", // 968 in hex
-  chainName: "BOT Chain Testnet",
+  chainId: "0x2A5", // 677 in hex
+  chainName: "BOT Chain",
   nativeCurrency: {
     name: "BOT",
     symbol: "BOT",
     decimals: 18,
   },
-  rpcUrls: ["https://rpc.bohr.life"],
-  blockExplorerUrls: ["https://scan.bohr.life"],
+  rpcUrls: ["https://rpc.botchain.ai"],
+  blockExplorerUrls: ["https://scan.botchain.ai"],
 };
 
 // Contract addresses — set via .env (VITE_ prefix) or Vercel env vars
