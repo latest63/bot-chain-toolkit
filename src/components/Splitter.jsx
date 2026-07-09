@@ -336,10 +336,11 @@ export default function Splitter({ provider, account, getContract, setStatus }) 
           <label>
             Recipients (one address per line or comma-separated)
             <textarea
-              rows={5}
+              rows={Math.min(Math.max(recipients.split("\n").length, 3), 15)}
               placeholder={`0xABC...\n0xDEF...\n0x123...`}
               value={recipients}
               onChange={(e) => setRecipients(e.target.value)}
+              className="splitter-textarea"
             />
           </label>
 
