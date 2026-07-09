@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { ethers } from "ethers";
+import * as XLSX from "xlsx";
 
 export default function Splitter({ provider, account, getContract, setStatus }) {
   const [mode, setMode] = useState("equal"); // "equal" or "custom"
@@ -7,6 +8,92 @@ export default function Splitter({ provider, account, getContract, setStatus }) 
   const [totalAmount, setTotalAmount] = useState("");
   const [customRows, setCustomRows] = useState([{ address: "", amount: "" }]);
   const [loading, setLoading] = useState(false);
+
+  // Spreadsheet state
+  const [sheetData, setSheetData] = useState(null); // parsed rows array
+  const [headers, setHeaders] = useState([]); // column names
+  const [selectedColumn, setSelectedColumn] = useState("");
+  const [fetching, setFetching] = useState(false);
+  const [fetchProgress, setFetchProgress] = useState({ current: 0, total: 0 });
+  const fileInputRef = useRef(null);
+
+  function handleFileUpload(e) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      try {
+        const data = new Uint8Array(evt.target.result);
+        const workbook = XLSX.read(data, { type: "array" });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const json = XLSX.utils.sheet_to_json(firstSheet, { defval: "" });
+
+        if (!json.length) {
+          setStatus("❌ Spreadsheet is empty");
+          return;
+        }
+
+        const cols = Object.keys(json[0]);
+        setHeaders(cols);
+        setSheetData(json);
+        setSelectedColumn("");
+        setStatus(`✅ Found ${json.length} rows with columns: ${cols.join(", ")}`);
+      } catch (err) {
+        setStatus(`❌ Failed to parse spreadsheet: ${err.message}`);
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  function handleFetchAddresses() {
+    if (!sheetData || !selectedColumn) return;
+
+    setFetching(true);
+    const total = sheetData.length;
+    setFetchProgress({ current: 0, total });
+
+    // Simulate progressive loading with a micro-delay per address for UX
+    const addrs = [];
+    let idx = 0;
+
+    function processNext() {
+      if (idx >= total) {
+        // Done — populate textarea
+        setRecipients(addrs.join("\n"));
+        setFetching(false);
+        setFetchProgress({ current: total, total });
+        setStatus(`✅ Fetched ${addrs.length} addresses from column "${selectedColumn}"`);
+        return;
+      }
+
+      const raw = sheetData[idx][selectedColumn];
+      const addr = String(raw).trim();
+      if (addr && ethers.isAddress(addr)) {
+        addrs.push(addr);
+      }
+
+      idx++;
+      setFetchProgress({ current: idx, total });
+
+      // Use requestAnimationFrame-style batching: process in chunks of 50
+      if (idx % 50 === 0 || idx === total) {
+        setTimeout(processNext, 8);
+      } else {
+        processNext();
+      }
+    }
+
+    processNext();
+  }
+
+  function clearSheet() {
+    setSheetData(null);
+    setHeaders([]);
+    setSelectedColumn("");
+    setFetchProgress({ current: 0, total: 0 });
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  }
 
   function addRow() {
     setCustomRows([...customRows, { address: "", amount: "" }]);
@@ -144,6 +231,108 @@ export default function Splitter({ provider, account, getContract, setStatus }) 
 
       {mode === "equal" ? (
         <form onSubmit={handleSplitEqually}>
+          {/* ── Spreadsheet Upload ── */}
+          <div className="spreadsheet-upload-area">
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".xlsx,.xls,.csv"
+              onChange={handleFileUpload}
+              className="spreadsheet-input"
+              id="sheet-upload"
+            />
+            <label htmlFor="sheet-upload" className="spreadsheet-label">
+              <span className="upload-icon">📄</span>
+              <span className="upload-text">
+                {headers.length > 0
+                  ? `Loaded: ${headers.length} columns · ${sheetData?.length ?? 0} rows`
+                  : "Upload Spreadsheet (.xlsx, .csv)"}
+              </span>
+              <span className="upload-btn-tag">Choose File</span>
+            </label>
+          </div>
+
+          {/* ── Column Picker + Fetch ── */}
+          {headers.length > 0 && !fetching && fetchProgress.current === 0 && (
+            <div className="sheet-column-bar">
+              <div className="column-picker-row">
+                <select
+                  value={selectedColumn}
+                  onChange={(e) => setSelectedColumn(e.target.value)}
+                  className="column-select"
+                >
+                  <option value="">— Select wallet column —</option>
+                  {headers.map((col) => (
+                    <option key={col} value={col}>
+                      {col}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  className="btn fetch"
+                  disabled={!selectedColumn}
+                  onClick={handleFetchAddresses}
+                >
+                  📥 Fetch
+                </button>
+                <button
+                  type="button"
+                  className="btn sheets-clear"
+                  onClick={clearSheet}
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ── Progress Bar ── */}
+          {fetching && (
+            <div className="fetch-progress-area">
+              <div className="fetch-progress-bar-track">
+                <div
+                  className="fetch-progress-bar-fill"
+                  style={{
+                    width: `${
+                      fetchProgress.total > 0
+                        ? (fetchProgress.current / fetchProgress.total) * 100
+                        : 0
+                    }%`,
+                  }}
+                />
+              </div>
+              <span className="fetch-progress-text">
+                Parsing addresses… {fetchProgress.current} / {fetchProgress.total}
+              </span>
+            </div>
+          )}
+
+          {/* ── Done state after fetch ── */}
+          {headers.length > 0 && !fetching && fetchProgress.current > 0 && (
+            <div className="sheet-done-bar">
+              <span className="sheet-done-text">
+                ✅ Loaded {fetchProgress.current} addresses
+              </span>
+              <div className="sheet-done-actions">
+                <button
+                  type="button"
+                  className="btn fetch"
+                  onClick={handleFetchAddresses}
+                >
+                  🔄 Re-fetch
+                </button>
+                <button
+                  type="button"
+                  className="btn sheets-clear"
+                  onClick={clearSheet}
+                >
+                  ✕ Clear
+                </button>
+              </div>
+            </div>
+          )}
+
           <label>
             Recipients (one address per line or comma-separated)
             <textarea
