@@ -68,9 +68,10 @@ export default function Splitter({ provider, account, getContract, setStatus }) 
       }
 
       const raw = sheetData[idx][selectedColumn];
-      const addr = String(raw).trim();
+      let addr = String(raw).trim().toLowerCase();
       if (addr && ethers.isAddress(addr)) {
-        addrs.push(addr);
+        // Normalize to checksummed format
+        addrs.push(ethers.getAddress(addr));
       }
 
       idx++;
@@ -118,7 +119,7 @@ export default function Splitter({ provider, account, getContract, setStatus }) 
 
     const addrs = recipients
       .split(/[\n,]+/)
-      .map((a) => a.trim())
+      .map((a) => a.trim().toLowerCase())
       .filter((a) => a.length > 0);
 
     if (addrs.length === 0) {
@@ -134,6 +135,9 @@ export default function Splitter({ provider, account, getContract, setStatus }) 
       }
     }
 
+    // Normalize to checksummed format
+    const normalized = addrs.map((a) => ethers.getAddress(a));
+
     setLoading(true);
     setStatus("⏳ Sending transaction...");
 
@@ -141,7 +145,7 @@ export default function Splitter({ provider, account, getContract, setStatus }) 
       const signer = await provider.getSigner();
       const contract = getContract(signer);
 
-      const tx = await contract.splitEqually(addrs, {
+      const tx = await contract.splitEqually(normalized, {
         value: ethers.parseEther(totalAmount),
       });
 
@@ -177,13 +181,13 @@ export default function Splitter({ provider, account, getContract, setStatus }) 
     }
 
     for (const row of validRows) {
-      if (!ethers.isAddress(row.address.trim())) {
+      if (!ethers.isAddress(row.address.trim().toLowerCase())) {
         setStatus(`❌ Invalid address: ${row.address.trim()}`);
         return;
       }
     }
 
-    const addrs = validRows.map((r) => r.address.trim());
+    const addrs = validRows.map((r) => ethers.getAddress(r.address.trim().toLowerCase()));
     const amounts = validRows.map((r) => ethers.parseEther(r.amount));
     const total = amounts.reduce((sum, a) => sum + a, 0n);
 
