@@ -331,19 +331,28 @@ section {
 }
 
 .feature-card {
-  background: rgba(15, 16, 18, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgb(15, 16, 18);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius);
   padding: clamp(14px, 2vw, 20px);
   transition: all 0.25s ease;
 }
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .feature-card {
+    background: rgba(15, 16, 18, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
 
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .feature-card:hover {
+    background: rgba(20, 21, 24, 0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+}
 .feature-card:hover {
-  background: rgba(20, 21, 24, 0.25);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border-color: var(--border-hover);
   transform: translateY(-2px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
@@ -419,18 +428,27 @@ section {
 .step {
   flex: 1; text-align: center;
   padding: clamp(16px, 2.5vw, 22px);
-  background: rgba(15, 16, 18, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgb(15, 16, 18);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius);
   transition: all 0.25s;
 }
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .step {
+    background: rgba(15, 16, 18, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
 
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .step:hover {
+    background: rgba(20, 21, 24, 0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+}
 .step:hover {
-  background: rgba(20, 21, 24, 0.25);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border-color: var(--border-hover);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
@@ -496,19 +514,28 @@ section {
 }
 
 .contract-card {
-  background: rgba(15, 16, 18, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgb(15, 16, 18);
   border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: var(--radius);
   padding: clamp(12px, 2vw, 18px);
   transition: all 0.25s;
 }
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .contract-card {
+    background: rgba(15, 16, 18, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
 
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .contract-card:hover {
+    background: rgba(20, 21, 24, 0.25);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+}
 .contract-card:hover {
-  background: rgba(20, 21, 24, 0.25);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   border-color: var(--border-hover);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 }
