@@ -337,21 +337,7 @@ section {
   padding: clamp(14px, 2vw, 20px);
   transition: all 0.25s ease;
 }
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .feature-card {
-    background: rgba(15, 16, 18, 0.12);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-}
 
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .feature-card:hover {
-    background: rgba(20, 21, 24, 0.25);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
-}
 .feature-card:hover {
   border-color: var(--border-hover);
   transform: translateY(-2px);
@@ -433,21 +419,7 @@ section {
   border-radius: var(--radius);
   transition: all 0.25s;
 }
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .step {
-    background: rgba(15, 16, 18, 0.12);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-}
 
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .step:hover {
-    background: rgba(20, 21, 24, 0.25);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
-}
 .step:hover {
   border-color: var(--border-hover);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
@@ -520,21 +492,7 @@ section {
   padding: clamp(12px, 2vw, 18px);
   transition: all 0.25s;
 }
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .contract-card {
-    background: rgba(15, 16, 18, 0.12);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-}
 
-@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-  .contract-card:hover {
-    background: rgba(20, 21, 24, 0.25);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
-}
 .contract-card:hover {
   border-color: var(--border-hover);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
